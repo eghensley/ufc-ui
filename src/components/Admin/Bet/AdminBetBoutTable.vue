@@ -17,8 +17,6 @@
                 <AdminBetBoutTableRow
                     :betBout="bout"
                     :adminBetBoutRowPw="adminBetBoutTablePw"
-                    :champBout="bout.champBout"
-                    :schedRounds="bout.schedRounds"
                     />
             </div>
         </div>

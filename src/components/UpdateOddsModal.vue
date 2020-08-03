@@ -60,7 +60,7 @@ var stanceDict = {
 export default {
     name: 'updateOddsModal',
     props: {
-        pw: {type: String},
+        oddsModalPw: {type: String},
         bout : {
             type: Object, default: function () { 
                 return {
@@ -133,7 +133,7 @@ export default {
             console.log(this.bFighter1Odds)
             console.log(this.bFighter2Odds)
 
-            ApiService.addMyBookieOdds({ 'oid': this.bout.fighterBoutXRefs[0].oid, 'mlOdds': this.convAmericanOddsToImpPerc(this.bFighter1Odds) }, self.pw)
+            ApiService.addMyBookieOdds({ 'oid': this.bout.fighterBoutXRefs[0].oid, 'mlOdds': this.convAmericanOddsToImpPerc(this.bFighter1Odds) }, this.oddsModalPw)
                 .then(
                     oddsUpdate1 => {
                         console.log('Fighter 2 odds updated successfully')
@@ -145,7 +145,7 @@ export default {
                         console.log(error1)
                     }
                 )
-            ApiService.addMyBookieOdds({ 'oid': this.bout.fighterBoutXRefs[1].oid, 'mlOdds': this.convAmericanOddsToImpPerc(this.bFighter2Odds) }, self.pw)
+            ApiService.addMyBookieOdds({ 'oid': this.bout.fighterBoutXRefs[1].oid, 'mlOdds': this.convAmericanOddsToImpPerc(this.bFighter2Odds) }, this.oddsModalPw)
                 .then(
                     oddsUpdate2 => {
                         console.log('Fighter 2 odds updated successfully')

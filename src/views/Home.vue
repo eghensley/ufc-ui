@@ -18,17 +18,21 @@
       v-if="!fightLoading"
       :boutInfo="boutData['bouts']"
     />
+    <HomeWrapper
+
+    />
   </div>
 </template>
 
 <script>
 import ApiService from '@/services/ApiService.js'
 import FightBetTable from '@/components/Fight/FightBetTable.vue'
+import HomeWrapper from '@/components/Home/HomeWrapper.vue'
 
 export default {
     name: 'home',
     components: {
-        FightBetTable
+        FightBetTable, HomeWrapper
     },
     data () {
         return {
@@ -43,23 +47,23 @@ export default {
     },
     methods: {
         initHomeMain () {
-        this.homeScreenInitialized = true
-        ApiService.getRecentFights()
-            .then(
-            fights => {
-                this.fightScreenFights = fights['response']//.slice(1, fights.length)
-                this.selectedFightId = this.fightScreenFights[0].fightId
-                this.selectedFightName = this.fightScreenFights[0].fightName
-                this.selectedFightDate = this.fightScreenFights[0].fightDate
-                this.getBoutsFromFightData()
-            }
-            ).catch(error => console.log(error))
-            .finally(
-                () => {
-                    this.homeScreenLoading = false
+            this.homeScreenInitialized = true
+            ApiService.getRecentFights()
+                .then(
+                fights => {
+                    this.fightScreenFights = fights['response']//.slice(1, fights.length)
+                    this.selectedFightId = this.fightScreenFights[0].fightId
+                    this.selectedFightName = this.fightScreenFights[0].fightName
+                    this.selectedFightDate = this.fightScreenFights[0].fightDate
+                    this.getBoutsFromFightData()
                 }
-            )
-        console.log('init fights page')
+                ).catch(error => console.log(error))
+                .finally(
+                    () => {
+                        this.homeScreenLoading = false
+                    }
+                )
+            console.log('init fights page')
         },
         convToDate (rawDate) {
             var date = new Date(rawDate)

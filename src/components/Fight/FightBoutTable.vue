@@ -5,17 +5,33 @@
                 <p class="card-header-title">
                     Bouts
                 </p>
-                <a href="#" class="card-header-icon" aria-label="more options">
+                <div class="dropdown is-hoverable is-right">
+                    <div class="dropdown-trigger">
+                        <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
+                            <span class="icon is-small">
+                                <i class="fas fa-angle-down" aria-hidden="true"></i>
+                            </span>
+                        </button>
+                    </div>
+                    <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                        <div class="dropdown-content" v-for="boutD in boutList" :key="boutD.oid">
+                            <a v-on:click="switchBout(boutD)">
+                                {{boutD['fighterBoutXRefs'][0]['fighter']['fighterName']}} VS {{boutD['fighterBoutXRefs'][1]['fighter']['fighterName']}}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!-- <a href="#" class="card-header-icon" aria-label="more options">
                     <span class="icon">
                         <i class="fa fa-angle-down" aria-hidden="true"></i>
                     </span>
-                </a>
+                </a> -->
             </header>
             <div class="card-table">
                 <div class="content">
                     <table class="table is-fullwidth is-striped">
                         <tbody>
-                            <tr v-for="bout in boutList" :key="bout.oid">
+                            <tr v-for="bout in boutList" :key="bout.oid" v-bind:class="{ 'is-hidden-mobile': !evalIfBoutSelected(bout)}">
                                 <td width="5%"><i class="fa fa-bell-o"></i></td>
                                 <td>
                                     <a @click="showFighterModal(bout['fighterBoutXRefs'][0]['fighter'])"> {{bout['fighterBoutXRefs'][0]['fighter']['fighterName']}} </a>
@@ -26,7 +42,7 @@
                                     <a @click="showFighterModal(bout['fighterBoutXRefs'][1]['fighter'])"> {{bout['fighterBoutXRefs'][1]['fighter']['fighterName']}} </a>
                                     <div class="is-small"> {{convImpProbToAmerOdds(bout['fighterBoutXRefs'][1]['mlOdds'])}} </div>
                                 </td>
-                                <td>
+                                <td class="is-hidden-mobile">
                                     <a class="button is-small" v-bind:class="{ 'is-success': evalIfBoutSelected(bout), 'is-info': !evalIfBoutSelected(bout)}" @click="switchBout(bout)">Details</a>
                                     <div class="is-small"> </div>
                                 </td>

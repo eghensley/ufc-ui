@@ -8,22 +8,22 @@
             <table class="table is-bordered is-striped is-narrow is-fullwidth">
                 <thead>
                     <tr>
-                        <th><abbr title="Fighters">Bout</abbr></th>
+                        <th class="is-hidden-mobile"><abbr title="Fighters">Bout</abbr></th>
                         <th><abbr title="Predicted Winner">Pred Winner</abbr></th>
-                        <th><abbr title="Predicted Odds">Pred Prob</abbr></th>
-                        <th><abbr title="Vegas Odds">Odds</abbr></th>
-                        <th><abbr title="Odds Difference">Pred Adv</abbr></th>
+                        <th class="is-hidden-mobile"><abbr title="Predicted Odds">Pred Prob</abbr></th>
+                        <th class="is-hidden-mobile"><abbr title="Vegas Odds">Odds</abbr></th>
+                        <th class="is-hidden-mobile"><abbr title="Odds Difference">Pred Adv</abbr></th>
                         <th><abbr title="Wager Weight">Wager Weight</abbr></th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="betBout in boutInfo" :key="betBout.oid">
                     <template v-if="betBout.betInfo && betBout.betInfo.bet && betBout.gender!='FEMALE'">
-                        <td>{{betBout['fighterBoutXRefs'][0]['fighter']['fighterName']}} v {{betBout['fighterBoutXRefs'][1]['fighter']['fighterName']}}</td>
+                        <td class="is-hidden-mobile">{{betBout['fighterBoutXRefs'][0]['fighter']['fighterName']}} v {{betBout['fighterBoutXRefs'][1]['fighter']['fighterName']}}</td>
                         <td>{{betBout.betInfo.predWinner}}</td>
-                        <td>{{round(betBout.betInfo.predProb)}}%</td>
-                        <td>{{round(betBout.betInfo.vegasOdds)}}%</td>
-                        <td>+{{round(betBout.betInfo.oddsDiff)}}%</td>
+                        <td class="is-hidden-mobile">{{round(betBout.betInfo.predProb)}}%</td>
+                        <td class="is-hidden-mobile">{{round(betBout.betInfo.vegasOdds)}}%</td>
+                        <td class="is-hidden-mobile">+{{round(betBout.betInfo.oddsDiff)}}%</td>
                         <td>${{round(betBout.betInfo.wagerWeight)}}</td>
                     </template>
                     </tr>

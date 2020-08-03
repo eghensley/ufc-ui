@@ -14,11 +14,11 @@
                 <p class="card-header-title">
                 Fighters
                 </p>
-                <a href="#" class="card-header-icon" aria-label="more options">
+                <!-- <a href="#" class="card-header-icon" aria-label="more options">
                     <span class="icon">
                         <i class="fa fa-angle-down" aria-hidden="true"></i>
                     </span>
-                </a>
+                </a> -->
             </header>
             <div class="card-table">
                 <div class="content">
@@ -38,7 +38,7 @@
                         </tbody>
                     </table>
                     <footer class="card-footer">
-                        <a>Placeholder Footer</a>
+                        <a></a>
                     </footer>
                 </div>
             </div>

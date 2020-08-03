@@ -64,7 +64,7 @@
             v-show="isOddsModalVisible"
             @closeOdds="closeOddsModal"
             :bout="selectedBout"
-            :pw="pw"
+            :oddsModalPw="pw"
         />
     </div>
 </template>

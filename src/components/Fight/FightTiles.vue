@@ -1,5 +1,5 @@
 <template>
-    <section class="info-tiles" id="fightInfo">
+    <section class="info-tiles is-hidden-mobile" id="fightInfo">
       <div class="tile is-ancestor has-text-centered">
         <div class="tile is-parent">
           <article class="tile is-child box">
