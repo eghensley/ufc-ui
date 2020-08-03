@@ -1,6 +1,6 @@
 applications:
   - name: ufc-ui-vue-js
-    buildpacks: https://github.com/cloudfoundry/staticfile-buildpack.git
+    buildpack: https://github.com/cloudfoundry/staticfile-buildpack.git
     random-route: true
     memory: 768M
     env:
