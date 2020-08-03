@@ -4,5 +4,5 @@ applications:
     random-route: true
     path: dist/
     memory: 768M
-    env:
-      FORCE_HTTPS: true
+    # env:
+    #   FORCE_HTTPS: true
