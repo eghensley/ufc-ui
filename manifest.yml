@@ -5,4 +5,4 @@ applications:
     path: dist/
     memory: 1536M
     instances: 2
-    disk_quota: 10G
+    disk_quota: 2048M
