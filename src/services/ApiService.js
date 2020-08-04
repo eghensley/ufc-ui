@@ -1,16 +1,19 @@
 import axios from 'axios'
 
-const local = false
-var springServer = null
-var flaskServer = null
+// const local = false
+// var springServer = null
+// var flaskServer = null
 
-if (local) {
-    springServer = 'localhost'
-    flaskServer = 'localhost'
-} else {
-    springServer = '207.237.93.29:4646'
-    flaskServer = '207.237.93.29:4747'
-}
+// if (local) {
+//     springServer = 'localhost'
+//     flaskServer = 'localhost'
+// } else {
+//     springServer = '207.237.93.29:4646'
+//     flaskServer = '207.237.93.29:4747'
+// }
+
+const springServer = 'ufc-rest-api-sb.mybluemix.net'
+const flaskServer = '207.237.93.29:4747'
 
 const standardHeaders = {
     headers: {

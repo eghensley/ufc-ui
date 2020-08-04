@@ -3,4 +3,6 @@ applications:
     buildpack: https://github.com/cloudfoundry/staticfile-buildpack.git
     random-route: false
     path: dist/
-    memory: 768M
+    memory: 1536M
+    instances: 2
+    disk_quota: 10G
