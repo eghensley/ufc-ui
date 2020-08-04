@@ -35,7 +35,7 @@ export default {
         return adminHeaders
     },
     getBoutsFromFight (fightId) {
-        return axios.get('http://' + springServer + '/ufc/rest/fight/' + fightId + '/details', standardHeaders).then(response => {
+        return axios.get('https://' + springServer + '/ufc/rest/fight/' + fightId + '/details', standardHeaders).then(response => {
             return response.data
         })
         .catch(error => {
@@ -43,7 +43,7 @@ export default {
         })
     },
     getBoutBetsFromFight (fightId) {
-        return axios.get('http://' + springServer + '/ufc/rest/fight/' + fightId + '/details/bet', standardHeaders).then(response => {
+        return axios.get('https://' + springServer + '/ufc/rest/fight/' + fightId + '/details/bet', standardHeaders).then(response => {
             return response.data
         })
         .catch(error => {
@@ -51,7 +51,7 @@ export default {
         })
     },
     getAllFightIds () {
-        return axios.get('http://' + springServer + '/ufc/rest/fight/all', standardHeaders).then(response => {
+        return axios.get('https://' + springServer + '/ufc/rest/fight/all', standardHeaders).then(response => {
             return response.data
         })
         .catch(error => {
@@ -60,7 +60,7 @@ export default {
     },
     addFightOdds (fightId, adminLogin) {
         var adminHeaders = this.buildAdminHeaders(adminLogin)
-        return axios.get('http://' + springServer + '/ufc/parse/odds/fight/' + fightId + '/odds', adminHeaders).then(response => {
+        return axios.get('https://' + springServer + '/ufc/parse/odds/fight/' + fightId + '/odds', adminHeaders).then(response => {
             return response.data
         })
         .catch(error => {
@@ -68,7 +68,7 @@ export default {
         })
     },
     getRecentFights () {
-        return axios.get('http://' + springServer + '/ufc/rest/fight/recent', standardHeaders).then(response => {
+        return axios.get('https://' + springServer + '/ufc/rest/fight/recent', standardHeaders).then(response => {
             return response.data
         })
         .catch(error => {
@@ -78,7 +78,7 @@ export default {
     addMyBookieOdds (payload, adminLogin) {
         var adminHeaders = this.buildAdminHeaders(adminLogin)
         console.log(adminHeaders)
-        return axios.post('http://' + springServer + '/ufc/scores/odds/myBookie/add', payload, adminHeaders).then(response => {
+        return axios.post('https://' + springServer + '/ufc/scores/odds/myBookie/add', payload, adminHeaders).then(response => {
             return response.data
         })
         .catch(error => {
@@ -86,7 +86,7 @@ export default {
         })
     },
     getFighterEloStats (fighterOid, fightOid) {
-        return axios.get('http://' + springServer + '/ufc/scores/elo/last/fighter/' + fighterOid + '/fight/' + fightOid, standardHeaders).then(response => {
+        return axios.get('https://' + springServer + '/ufc/scores/elo/last/fighter/' + fighterOid + '/fight/' + fightOid, standardHeaders).then(response => {
             return response.data
         })
         .catch(error => {
@@ -96,7 +96,7 @@ export default {
     getFightersMissingAgeCount (adminLogin) {
         var adminHeaders = this.buildAdminHeaders(adminLogin)
 
-        return axios.get('http://' + springServer + '/ufc/rest/admin/missing/fighter/age', adminHeaders).then(response => {
+        return axios.get('https://' + springServer + '/ufc/rest/admin/missing/fighter/age', adminHeaders).then(response => {
             return response.data
         })
         .catch(error => {
@@ -106,7 +106,7 @@ export default {
     getFightersMissingHeightCount (adminLogin) {
         var adminHeaders = this.buildAdminHeaders(adminLogin)
 
-        return axios.get('http://' + springServer + '/ufc/rest/admin/missing/fighter/height', adminHeaders).then(response => {
+        return axios.get('https://' + springServer + '/ufc/rest/admin/missing/fighter/height', adminHeaders).then(response => {
             return response.data
         })
         .catch(error => {
@@ -116,7 +116,7 @@ export default {
     getFightersMissingReachCount (adminLogin) {
         var adminHeaders = this.buildAdminHeaders(adminLogin)
 
-        return axios.get('http://' + springServer + '/ufc/rest/admin/missing/fighter/reach', adminHeaders).then(response => {
+        return axios.get('https://' + springServer + '/ufc/rest/admin/missing/fighter/reach', adminHeaders).then(response => {
             return response.data
         })
         .catch(error => {
@@ -126,7 +126,7 @@ export default {
     getIncompleteBoutsCount (adminLogin) {
         var adminHeaders = this.buildAdminHeaders(adminLogin)
 
-        return axios.get('http://' + springServer + '/ufc/rest/admin/missing/bouts', adminHeaders).then(response => {
+        return axios.get('https://' + springServer + '/ufc/rest/admin/missing/bouts', adminHeaders).then(response => {
             return response.data
         })
         .catch(error => {
@@ -136,7 +136,7 @@ export default {
     resetFightData (adminLogin, fightOid) {
         var adminHeaders = this.buildAdminHeaders(adminLogin)
 
-        return axios.get('http://' + springServer + '/ufc/rest/admin/reset/fight/'+fightOid, adminHeaders).then(response => {
+        return axios.get('https://' + springServer + '/ufc/rest/admin/reset/fight/'+fightOid, adminHeaders).then(response => {
             return response.data
         })
         .catch(error => {
@@ -146,7 +146,7 @@ export default {
     addBoutsToPastFight (adminLogin, fightOid) {
         var adminHeaders = this.buildAdminHeaders(adminLogin)
 
-        return axios.get('http://' + flaskServer + '/ufc/api/v1.0/populate/past/'+fightOid, adminHeaders).then(response => {
+        return axios.get('https://' + flaskServer + '/ufc/api/v1.0/populate/past/'+fightOid, adminHeaders).then(response => {
             return response.data
         })
         .catch(error => {
@@ -156,7 +156,7 @@ export default {
     addBoutsToFutFight (adminLogin, fightOid) {
         var adminHeaders = this.buildAdminHeaders(adminLogin)
 
-        return axios.get('http://' + flaskServer + '/ufc/api/v1.0/populate/future/'+fightOid, adminHeaders).then(response => {
+        return axios.get('https://' + flaskServer + '/ufc/api/v1.0/populate/future/'+fightOid, adminHeaders).then(response => {
             return response.data
         })
         .catch(error => {
@@ -164,7 +164,7 @@ export default {
         })
     },
     getWeightClassRankings (weightClass) {
-        return axios.get('http://' + flaskServer + '/ufc/api/v1.0/rankings/'+weightClass, standardHeaders).then(response => {
+        return axios.get('https://' + flaskServer + '/ufc/api/v1.0/rankings/'+weightClass, standardHeaders).then(response => {
             return response.data
         })
         .catch(error => {
@@ -174,7 +174,7 @@ export default {
     addFightOddsUrl (adminLogin, fightId, url) {
         var adminHeaders = this.buildAdminHeaders(adminLogin)
 
-        return axios.get('http://' + springServer + '/ufc/parse/odds/fight/'+fightId+ '/fightOdds/' + url, adminHeaders).then(response => {
+        return axios.get('https://' + springServer + '/ufc/parse/odds/fight/'+fightId+ '/fightOdds/' + url, adminHeaders).then(response => {
             return response.data
         })
         .catch(error => {
@@ -184,7 +184,7 @@ export default {
     addFutureBoutSummary (adminLogin, payload) {
         var adminHeaders = this.buildAdminHeaders(adminLogin)
         
-        return axios.post('http://' + springServer + '/ufc/rest/bout/future/summary/add', payload, adminHeaders).then(response => {
+        return axios.post('https://' + springServer + '/ufc/rest/bout/future/summary/add', payload, adminHeaders).then(response => {
             return response.data
         })
         .catch(error => {
@@ -193,7 +193,7 @@ export default {
     },
     addMlProbToBout (adminLogin, boutId) {
         var adminHeaders = this.buildAdminHeaders(adminLogin)
-        return axios.get('http://' + flaskServer + '/ufc/api/v1.0/populate/ml/'+boutId, adminHeaders).then(response => {
+        return axios.get('https://' + flaskServer + '/ufc/api/v1.0/populate/ml/'+boutId, adminHeaders).then(response => {
             return response.data
         })
         .catch(error => {
@@ -203,7 +203,7 @@ export default {
     addBetInfo (payload, adminLogin) {
         var adminHeaders = this.buildAdminHeaders(adminLogin)
         
-        return axios.post('http://' + springServer + '/ufc/bet/update', payload, adminHeaders).then(response => {
+        return axios.post('https://' + springServer + '/ufc/bet/update', payload, adminHeaders).then(response => {
             return response.data
         })
         .catch(error => {
@@ -211,7 +211,7 @@ export default {
         })
     },
     getBetInfo () {
-        return axios.get('http://' + springServer + '/ufc/bet/history', standardHeaders).then(response => {
+        return axios.get('https://' + springServer + '/ufc/bet/history', standardHeaders).then(response => {
             return response.data
         })
         .catch(error => {
