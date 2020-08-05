@@ -6,5 +6,3 @@ applications:
     memory: 1536M
     instances: 2
     disk_quota: 2048M
-    services:
-      - API Connect-auto
