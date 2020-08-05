@@ -18,7 +18,9 @@ const flaskServer = '207.237.93.29:4747'
 const standardHeaders = {
     headers: {
       'Access-Control-Allow-Origin': '*',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'X-IBM-Client-Id': '0b86eee1-9bb2-4b24-a69c-fa512f2fef36',
+      'X-IBM-Client-Secret': '01827f5a-297c-415d-9e28-478b529b144a'
     }
 }
 
@@ -29,6 +31,8 @@ export default {
             headers: {
                 'Access-Control-Allow-Origin': standardHeaders['headers']['Access-Control-Allow-Origin'],
                 'Content-Type': standardHeaders['headers']['Content-Type'],
+                'X-IBM-Client-Id': standardHeaders['headers']['X-IBM-Client-Id'],
+                'X-IBM-Client-Secret': standardHeaders['headers']['X-IBM-Client-Secret'],
                 'password': adminLogin
             }   
         }
