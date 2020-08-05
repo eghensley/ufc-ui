@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const local = true
+const local = false
 
 var springServer = 'https://ufc-rest-api-sb.us-east.mybluemix.net'
 const flaskServer = '207.237.93.29:4747'
