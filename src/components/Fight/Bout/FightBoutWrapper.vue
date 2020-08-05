@@ -1,41 +1,39 @@
 <template>
     <div class="column is-6">
-        <header class="card-header">
-            <p class="card-header-title">
-                Bout Details
-            </p>
-            <a href="#" class="card-header-icon" aria-label="more options">
-                <span class="icon">
-                <i class="fa fa-angle-down" aria-hidden="true"></i>
-                </span>
-            </a>
-        </header>
-        <div class="card-content">
-            <div class="content">
-                <div class="title"> {{ selectedBoutInfo['fighterBoutXRefs'][0]['fighter']['fighterName']}} vs {{ selectedBoutInfo['fighterBoutXRefs'][1]['fighter']['fighterName'] }} </div>
-                <div class="level">
-                    <div class="level-item">
-                        <div>
-                            <div class="heading"> Scheduled Rounds </div>
-                            <div class="title is-5"> {{ selectedBoutInfo['schedRounds'] }} </div>
-                        </div>
-                    </div>
-                    <div class="level-item">
-                        <div>
-                            <div class="heading"> Championship? </div>
-                            <div class="title is-5"> {{ selectedBoutInfo['champBout'] }} </div>
-                        </div>
-                    </div>
-                    <div class="level-item">
-                        <div>
-                            <div class="heading"> Weight Class </div>
-                            <div class="title is-5"> {{ resolveWeightClass(selectedBoutInfo['weightClass']) }} </div>
-                        </div>
-                    </div>
-                </div>
+        <div class="card events-card">
 
-                <div id="chart">
-                <apexchart type="bar" height="440" :options="chartOptions" :series="eloDataSeries"></apexchart>
+            <header class="card-header">
+                <p class="card-header-title">
+                    Bout Details
+                </p>
+            </header>
+            <div class="card-content">
+                <div class="content">
+                    <div class="title"> {{ selectedBoutInfo['fighterBoutXRefs'][0]['fighter']['fighterName']}} vs {{ selectedBoutInfo['fighterBoutXRefs'][1]['fighter']['fighterName'] }} </div>
+                    <div class="level">
+                        <div class="level-item">
+                            <div>
+                                <div class="heading"> Scheduled Rounds </div>
+                                <div class="title is-5"> {{ selectedBoutInfo['schedRounds'] }} </div>
+                            </div>
+                        </div>
+                        <div class="level-item">
+                            <div>
+                                <div class="heading"> Championship? </div>
+                                <div class="title is-5"> {{ selectedBoutInfo['champBout'] }} </div>
+                            </div>
+                        </div>
+                        <div class="level-item">
+                            <div>
+                                <div class="heading"> Weight Class </div>
+                                <div class="title is-5"> {{ resolveWeightClass(selectedBoutInfo['weightClass']) }} </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="chart">
+                        <apexchart type="bar" height="440" :options="chartOptions" :series="eloDataSeries"></apexchart>
+                    </div>
                 </div>
             </div>
         </div>

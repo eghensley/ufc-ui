@@ -81,6 +81,9 @@
       </div>
     </div>
     <router-view/>
+    <!-- <span id="siteseal">
+      <script async type="text/javascript" src="https://seal.godaddy.com/getSeal?sealID=bHPpgXGCxo16dn3oxpUqJZUGQXkLM0wmuY8NqhzurEc9VFu9lebsaYcImQ0B"></script>
+    </span> -->
   </div>
 </template>
 

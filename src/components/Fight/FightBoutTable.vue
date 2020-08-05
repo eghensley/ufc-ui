@@ -5,7 +5,7 @@
                 <p class="card-header-title">
                     Bouts
                 </p>
-                <div class="dropdown is-hoverable is-right">
+                <div class="dropdown is-hoverable is-right is-hidden-tablet is-hidden-desktop is-hidden-widescreen">
                     <div class="dropdown-trigger">
                         <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
                             <span class="icon is-small">
