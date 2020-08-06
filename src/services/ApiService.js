@@ -46,6 +46,22 @@ export default {
             console.log(error)
         })
     },
+    getBasicBoutsFromFight (fightId) {
+        return axios.get( springServer + '/ufc/rest/fight/' + fightId + '/details/basic', standardHeaders).then(response => {
+            return response.data
+        })
+        .catch(error => {
+            console.log(error)
+        })
+    },
+    getBetsFromFight (fightId) {
+        return axios.get( springServer + '/ufc/bet/table/fight/' + fightId, standardHeaders).then(response => {
+            return response.data
+        })
+        .catch(error => {
+            console.log(error)
+        })
+    },
     getBoutBetsFromFight (fightId) {
         return axios.get( springServer + '/ufc/rest/fight/' + fightId + '/details/bet', standardHeaders).then(response => {
             return response.data
@@ -215,7 +231,7 @@ export default {
         })
     },
     getBetInfo () {
-        return axios.get( springServer + '/ufc/bet/history', standardHeaders).then(response => {
+        return axios.get( springServer + '/ufc/bet/history/v2', standardHeaders).then(response => {
             return response.data
         })
         .catch(error => {

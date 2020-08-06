@@ -1,8 +1,10 @@
 applications:
-  - name: ufc-ui-vue-js
+  - name: www
     buildpack: https://github.com/cloudfoundry/staticfile-buildpack.git
     random-route: false
     path: dist/
     memory: 1536M
     instances: 2
     disk_quota: 2048M
+    domains:
+      - app.bet-ufc.com

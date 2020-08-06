@@ -18,13 +18,13 @@
                 </thead>
                 <tbody>
                     <tr v-for="betBout in boutInfo" :key="betBout.oid">
-                    <template v-if="betBout.betInfo && betBout.betInfo.bet && betBout.gender!='FEMALE'">
-                        <td class="is-hidden-mobile">{{betBout['fighterBoutXRefs'][0]['fighter']['fighterName']}} v {{betBout['fighterBoutXRefs'][1]['fighter']['fighterName']}}</td>
-                        <td>{{betBout.betInfo.predWinner}}</td>
-                        <td class="is-hidden-mobile">{{round(betBout.betInfo.predProb)}}%</td>
-                        <td class="is-hidden-mobile">{{round(betBout.betInfo.vegasOdds)}}%</td>
-                        <td class="is-hidden-mobile">+{{round(betBout.betInfo.oddsDiff)}}%</td>
-                        <td>${{round(betBout.betInfo.wagerWeight)}}</td>
+                    <template v-if="betBout.bet">
+                        <td class="is-hidden-mobile">{{betBout.boutName}}</td>
+                        <td>{{betBout.predWinner}}</td>
+                        <td class="is-hidden-mobile">{{round(betBout.predProb)}}%</td>
+                        <td class="is-hidden-mobile">{{round(betBout.vegasOdds)}}%</td>
+                        <td class="is-hidden-mobile">+{{round(betBout.oddsDiff)}}%</td>
+                        <td>${{round(betBout.wagerWeight)}}</td>
                     </template>
                     </tr>
                 </tbody>

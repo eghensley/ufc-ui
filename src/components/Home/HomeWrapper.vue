@@ -26,18 +26,10 @@ export default {
                     var i
                     for (i = 0; i < this.betData.length; i++) {
                         console.log(this.betData[i].fightName)
-
-                        var boutBank = 0
-                        var j
-                        for (j = 0; j < this.betData[i]['bouts'].length; j++) {
-                            if (this.betData[i]['bouts'][j]['fighterBoutXRefs'][0].betMade) {
-                                boutBank += this.betData[i]['bouts'][j]['fighterBoutXRefs'][0].betResult
-                            }
-                        }
-                        console.log(boutBank)
-                        bank += boutBank
+                        console.log(this.betData[i].result)
+                        bank += this.betData[i].result
                         this.betSeries[0].data.push(bank)
-                        this.betSeries[1].data.push(boutBank)
+                        this.betSeries[1].data.push(this.betData[i].result)
                         this.chartOptions.xaxis.categories.push(this.betData[i].fightName)
                     }
 

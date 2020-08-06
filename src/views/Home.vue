@@ -16,7 +16,7 @@
     </section>
     <FightBetTable
       v-if="!fightLoading"
-      :boutInfo="boutData['bouts']"
+      :boutInfo="betData"
     />
     <HomeWrapper
 
@@ -42,7 +42,7 @@ export default {
             selectedFightName: '',
             selectedFightDate: '',
             fightLoading: true,
-            boutData: {}
+            betData: []
         }
     },
     methods: {
@@ -55,7 +55,7 @@ export default {
                     this.selectedFightId = this.fightScreenFights[0].fightId
                     this.selectedFightName = this.fightScreenFights[0].fightName
                     this.selectedFightDate = this.fightScreenFights[0].fightDate
-                    this.getBoutsFromFightData()
+                    this.getBetsFromFightData()
                 }
                 ).catch(error => console.log(error))
                 .finally(
@@ -69,12 +69,12 @@ export default {
             var date = new Date(rawDate)
             return date.toLocaleDateString()
         },
-        getBoutsFromFightData () {
+        getBetsFromFightData () {
             this.fightLoading = true
-            ApiService.getBoutsFromFight(this.selectedFightId)
+            ApiService.getBetsFromFight(this.selectedFightId)
                 .then(
-                bouts => {
-                    this.boutData = bouts['response']
+                bets => {
+                    this.betData = bets['response']
                 }
                 ).catch(error => console.log(error))
                 .finally(

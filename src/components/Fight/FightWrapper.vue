@@ -17,7 +17,7 @@
 
     <FightBetTable
       v-if="!fightLoading && evalIfFightInFuture(boutData.fightDate)"
-      :boutInfo="boutData['bouts']"
+      :boutInfo="betData"
     />
 
     <div v-if="!fightLoading" class="columns">
@@ -66,6 +66,7 @@ export default {
         fightLoading: true,
         fightOid: null,
         boutData: {},
+        betData: [],
         selectedBout: {},
         eloSeries: [
             {
@@ -85,6 +86,7 @@ export default {
     },
     methods: {
         initFightPage () {
+            this.getBetsFromFightData()
             this.getBoutsFromFightData()
         },
         evalIfFightInFuture (fightDate) {
@@ -97,9 +99,17 @@ export default {
                 return true
             }
         },
+        getBetsFromFightData () {
+            ApiService.getBetsFromFight(this.fightId)
+                .then(
+                bets => {
+                    this.betData = bets['response']
+                }
+                ).catch(error => console.log(error))            
+        },
         getBoutsFromFightData () {
             this.fightLoading = true
-            ApiService.getBoutsFromFight(this.fightId)
+            ApiService.getBasicBoutsFromFight(this.fightId)
                 .then(
                 bouts => {
                     this.boutData = bouts['response']
