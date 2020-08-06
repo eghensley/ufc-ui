@@ -3,7 +3,7 @@ import axios from 'axios'
 const local = false
 
 var springServer = 'https://ufc-rest-api-sb.us-east.mybluemix.net'
-const flaskServer = '207.237.93.29:4747'
+var flaskServer = 'https://ufc-ml-api-flask.us-east.mybluemix.net'
 
 // 
 // var springServer = null
@@ -11,6 +11,7 @@ const flaskServer = '207.237.93.29:4747'
 
 if (local) {
     springServer = 'http://localhost:4646'
+    flaskServer = 'http://207.237.93.29:4747'
 }
 
 
