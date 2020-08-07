@@ -1,5 +1,5 @@
 <template>
-    <div class="dropdown is-right" v-on:click="toggleDropdown()" v-bind:class="{ 'is-active': fightDropDownVis }">
+    <div class="dropdown is-left" v-on:click="toggleDropdown()" v-bind:class="{ 'is-active': fightDropDownVis }">
         <div class="dropdown-trigger">
             <button class="button" aria-haspopup="true" aria-controls="fight-dropdown-menu">
                 <span>Change Fight</span>

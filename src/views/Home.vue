@@ -71,7 +71,9 @@ export default {
             console.log('init fights page')
         },
         convToDate (rawDate) {
-            var date = new Date(rawDate)
+            var rawDateComps = rawDate.split('T')[0].split('-')
+            var date = new Date(parseInt(rawDateComps[0]), parseInt(rawDateComps[1]), parseInt(rawDateComps[2])) 
+            // var date = Date.parse(.replace())//.replace('T', ''))
             return date.toLocaleDateString()
         },
         getBetsFromFightData () {

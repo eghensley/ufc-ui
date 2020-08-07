@@ -30,7 +30,7 @@ export default {
                         bank += this.betData[i].result
                         this.betSeries[0].data.push(bank)
                         this.betSeries[1].data.push(this.betData[i].result)
-                        this.chartOptions.xaxis.categories.push(this.betData[i].fightName)
+                        this.chartOptions.xaxis.categories.push(this.betData[i].fightName.split(':')[1])
                     }
 
                     console.log(this.betSeries)
@@ -69,16 +69,16 @@ export default {
                 //     }
                 // },
                 title: {
-                    text: 'Betting Model History'
+                    text: 'Betting Model History  (Event and rolling total result)'
                 },
                 xaxis: {
                     categories: [],
                     title: {
-                        text: 'Fight Date'
+                        text: 'Event'
                     },
                     labels: {
                         formatter: function (val) {
-                            return val
+                            return val//.split(";")[1]
                         }
                     }
                 },

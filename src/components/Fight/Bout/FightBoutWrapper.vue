@@ -13,20 +13,20 @@
                     <div class="level">
                         <div class="level-item">
                             <div>
-                                <div class="heading"> Scheduled Rounds </div>
-                                <div class="title is-5"> {{ selectedBoutInfo['schedRounds'] }} </div>
+                                <div class="heading has-text-centered"> Scheduled Rounds </div>
+                                <div class="title is-5 has-text-centered"> {{ selectedBoutInfo['schedRounds'] }} </div>
                             </div>
                         </div>
                         <div class="level-item">
                             <div>
-                                <div class="heading"> Championship? </div>
-                                <div class="title is-5"> {{ selectedBoutInfo['champBout'] }} </div>
+                                <div class="heading has-text-centered"> Championship? </div>
+                                <div class="title is-5 has-text-centered"> {{ selectedBoutInfo['champBout'] }} </div>
                             </div>
                         </div>
                         <div class="level-item">
                             <div>
-                                <div class="heading"> Weight Class </div>
-                                <div class="title is-5"> {{ resolveWeightClass(selectedBoutInfo['weightClass']) }} </div>
+                                <div class="heading has-text-centered"> Weight Class </div>
+                                <div class="title is-5 has-text-centered"> {{ resolveWeightClass(selectedBoutInfo['weightClass']) }} </div>
                             </div>
                         </div>
                     </div>

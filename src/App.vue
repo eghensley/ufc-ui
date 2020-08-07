@@ -39,7 +39,7 @@
                 </span>
                 Rankings
               </router-link>
-              
+
               <div class="navbar-item has-dropdown is-hoverable">
                 <a class="navbar-link">
                   More
