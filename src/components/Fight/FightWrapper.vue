@@ -30,6 +30,7 @@
         v-if="fighter1EloLoaded && fighter2EloLoaded"
         :selectedBoutInfo="selectedBout"
         :eloDataSeries="eloSeries"
+        :showEloChart="eloChartReady"
       />
     </div>
   </div>
@@ -70,16 +71,17 @@ export default {
         selectedBout: {},
         eloSeries: [
             {
-            name: 'Fighter 1',
-            data: [0, 0, 0, 0, 0, 0, 0, 0]
+                name: 'Fighter 1',
+                data: [0, 0, 0, 0, 0, 0, 0, 0],
             },
             {
-            name: 'Fighter 2',
-            data: [0, 0, 0, 0, 0, 0, 0, 0]
+                name: 'Fighter 2',
+                data: [0, 0, 0, 0, 0, 0, 0, 0],
             }
         ],
         fighter1EloLoaded: false,
         fighter2EloLoaded: false,
+        eloChartReady: false,
         fighter1Elo: {},
         fighter2Elo: {}
         }
@@ -98,6 +100,27 @@ export default {
             } else {
                 return true
             }
+        },
+        standardizeElo (val, idx) {
+            // if (idx === 0) {
+            //     val /= 0.0904132486198668
+            // } else if (idx === 1) {
+            //     val /= 0.91567115525423
+            // } else if (idx === 2) {
+            //     val /= 0.0513865870621742
+            // } else if (idx === 3) {
+            //     val /= 0.952223713796887
+            // } else if (idx === 4) {
+            //     val /= 0.0657570703407838
+            // } else if (idx === 5) {
+            //     val /= 0.048189049780901
+            // } else if (idx === 6) {
+            //     val /= 0.0912629429440298
+            // } else if (idx === 7) {
+            //     val /= 0.397719813625663
+            // }
+            idx += 0
+            return val + idx - idx
         },
         getBetsFromFightData () {
             ApiService.getBetsFromFight(this.fightId)
@@ -121,8 +144,8 @@ export default {
                     () => { 
                         this.fighter1EloLoaded = false
                         this.fighter2EloLoaded = false
-                        this.getFighterElo(this.selectedBout['fighterBoutXRefs'][0]['fighter']['oid'], 1)
-                        this.getFighterElo(this.selectedBout['fighterBoutXRefs'][1]['fighter']['oid'], 2)
+                        this.eloChartReady = false
+                        this.getFirstFighterElo(this.selectedBout['fighterBoutXRefs'][0]['fighter']['oid'], this.selectedBout['fighterBoutXRefs'][1]['fighter']['oid'])
                         this.fightLoading = false 
                         }
                 )
@@ -130,34 +153,50 @@ export default {
         round (inDouble) {
             return formatter.format(inDouble)
         },
-        getFighterElo (fighterOid, whichFighter) {
+        getFirstFighterElo (fighterOid1, fighterOid2) {
+            ApiService.getFighterEloStats(fighterOid1, this.fightOid)
+                .then(
+                    fighterStats => {
+                        this.fighter1Elo = fighterStats['response']
+                        this.eloSeries[0]['name'] = this.selectedBout['fighterBoutXRefs'][0]['fighter']['fighterName']
+                        this.eloSeries[0]['data'] = [fighterStats['response']['offStrikeEloPost'], fighterStats['response']['defStrikeEloPost'], fighterStats['response']['offGrapplingEloPost'], fighterStats['response']['defGrapplingEloPost'], fighterStats['response']['powerStrikeEloPost'], fighterStats['response']['chinStrikeEloPost'], fighterStats['response']['subGrapplingEloPost'], fighterStats['response']['evasGrapplingEloPost']]                        
+                        this.fighter1EloLoaded = true
+                    }
+                ).finally (
+                    () => {
+                        this.getSecondFighterElo(fighterOid2)
+                    }
+                )
+        },
+        getSecondFighterElo (fighterOid) {
             ApiService.getFighterEloStats(fighterOid, this.fightOid)
                 .then(
-                fighterStats => {
-                    if (whichFighter === 1) {
-                    this.fighter1Elo = fighterStats['response']
-                    this.eloSeries[0]['name'] = this.selectedBout['fighterBoutXRefs'][0]['fighter']['fighterName']
-                    this.eloSeries[0]['data'] = [fighterStats['response']['offStrikeEloPost'], fighterStats['response']['defStrikeEloPost'], fighterStats['response']['offGrapplingEloPost'], fighterStats['response']['defGrapplingEloPost'], fighterStats['response']['powerStrikeEloPost'], fighterStats['response']['chinStrikeEloPost'], fighterStats['response']['subGrapplingEloPost'], fighterStats['response']['evasGrapplingEloPost']]
-                    this.fighter1EloLoaded = true
-                    } else {
+                    fighterStats => {
                         this.fighter2Elo = fighterStats['response']
                         this.eloSeries[1]['name'] = this.selectedBout['fighterBoutXRefs'][1]['fighter']['fighterName']
                         this.eloSeries[1]['data'] = [fighterStats['response']['offStrikeEloPost'], fighterStats['response']['defStrikeEloPost'], fighterStats['response']['offGrapplingEloPost'], fighterStats['response']['defGrapplingEloPost'], fighterStats['response']['powerStrikeEloPost'], fighterStats['response']['chinStrikeEloPost'], fighterStats['response']['subGrapplingEloPost'], fighterStats['response']['evasGrapplingEloPost']]
-                        var i
-                        for (i = 0; i < 8; i++) {
-                            if (this.eloSeries[0]['data'][i] > this.eloSeries[1]['data'][i]) {
-                            this.eloSeries[0]['data'][i] = (this.eloSeries[0]['data'][i] - this.eloSeries[1]['data'][i]) * -1
-                            this.eloSeries[1]['data'][i] = 0
-                            } else {
-                            this.eloSeries[1]['data'][i] = this.eloSeries[1]['data'][i] - this.eloSeries[0]['data'][i]
-                            this.eloSeries[0]['data'][i] = 0
-                            }
-                        }
-                        console.log(this.eloSeries)
-                        this.fighter2EloLoaded = true
                     }
-                }
-                ).catch(error => console.log(error))
+                ).finally(
+                    () => {
+                        var i
+                        var toLoad = true
+                        for (i = 0; i < 8; i++) {
+                            if (this.eloSeries[0]['data'][i] === null || this.eloSeries[1]['data'][i] === null) {
+                                toLoad = false
+                                break
+                            }
+                            if (this.eloSeries[0]['data'][i] > this.eloSeries[1]['data'][i]) {
+                                this.eloSeries[0]['data'][i] = (this.standardizeElo(this.eloSeries[0]['data'][i] - this.eloSeries[1]['data'][i], i)) * -1
+                                this.eloSeries[1]['data'][i] = 0
+                            } else {
+                                this.eloSeries[1]['data'][i] = this.standardizeElo(this.eloSeries[1]['data'][i] - this.eloSeries[0]['data'][i], i)
+                                this.eloSeries[0]['data'][i] = 0
+                            }
+                        }      
+                        this.eloChartReady = toLoad     
+                        this.fighter2EloLoaded = true             
+                    }
+                )
         },
         changeBout (boutInfo) {
             this.eloSeries = [{
@@ -171,8 +210,8 @@ export default {
             this.fighter1EloLoaded = false
             this.fighter2EloLoaded = false
             this.selectedBout = boutInfo
-            this.getFighterElo(this.selectedBout['fighterBoutXRefs'][0]['fighter']['oid'], 1)
-            this.getFighterElo(this.selectedBout['fighterBoutXRefs'][1]['fighter']['oid'], 2)
+            this.eloChartReady = false
+            this.getFirstFighterElo(this.selectedBout['fighterBoutXRefs'][0]['fighter']['oid'], this.selectedBout['fighterBoutXRefs'][1]['fighter']['oid'])
         }
     }
 }

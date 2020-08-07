@@ -31,8 +31,11 @@
                         </div>
                     </div>
 
-                    <div id="chart">
+                    <div id="chart" v-if="showEloChart">
                         <apexchart type="bar" height="440" :options="chartOptions" :series="eloDataSeries"></apexchart>
+                    </div>
+                    <div v-if="!showEloChart">
+                        One or both fighters lack data required to populate a comparison
                     </div>
                 </div>
             </div>
@@ -67,7 +70,8 @@ export default {
     },
     props: {
         selectedBoutInfo: {type: Object},
-        eloDataSeries: {type: Array}
+        eloDataSeries: {type: Array},
+        showEloChart: {type: Boolean, default: true}
     },
     methods: {
         resolveWeightClass (myKey) {
@@ -104,9 +108,10 @@ export default {
                     }
                 },
                 yaxis: {
-                    min: -0.1,
-                    max: 0.1,
+                    min: -.2,
+                    max: .2,
                     title: {
+
                     }
                 },
                 tooltip: {
@@ -132,7 +137,9 @@ export default {
                     },
                     labels: {
                         formatter: function (val) {
-                            return Math.abs(Math.round(val)) + '%'
+                            val = ""
+                            return val 
+                            // return Math.abs(Math.round(val)) 
                         }
                     }
                 }

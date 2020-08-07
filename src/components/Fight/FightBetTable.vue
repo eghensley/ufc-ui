@@ -13,7 +13,7 @@
                         <th class="is-hidden-mobile"><abbr title="Predicted Odds">Pred Prob</abbr></th>
                         <th class="is-hidden-mobile"><abbr title="Vegas Odds">Odds</abbr></th>
                         <th class="is-hidden-mobile"><abbr title="Odds Difference">Pred Adv</abbr></th>
-                        <th><abbr title="Wager Weight">Wager Weight</abbr></th>
+                        <th><abbr title="Amount to bet based on model">Wager Weight</abbr></th>
                     </tr>
                 </thead>
                 <tbody>

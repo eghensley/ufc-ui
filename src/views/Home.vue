@@ -14,6 +14,11 @@
         <h1 class="w3-xxxlarge" v-if="homeScreenLoading && !homeScreenInitialized"> {{initHomeMain()}} </h1>
       </div>
     </section>
+
+    <!-- <section class="container">
+
+    </section> -->
+
     <FightBetTable
       v-if="!fightLoading"
       :boutInfo="betData"
