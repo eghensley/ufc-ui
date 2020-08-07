@@ -2,15 +2,19 @@
   <div class="container">
     <section class="hero is-info welcome is-small" id="myHeader">
       <div class="hero-body">
-        <div class="container">
-          <h2 class="title" v-if="!fightScreenLoading"> {{ selectedFightName }} </h2>
-          <h2 class="subtitle" v-if="!fightScreenLoading"> {{ convToDate(selectedFightDate) }} </h2>
-          <FightDropdown
-            v-if="!fightScreenLoading"
-            :pastFightMetaList="fightScreenFights"
-            :curFightId="selectedFightId"
-            @newFightId="switchFightScreenFight"
-           />
+        <div class="columns">
+          <div class="column is-four-fifths">
+            <h2 class="title" v-if="!fightScreenLoading"> {{ selectedFightName }} </h2>
+            <h2 class="subtitle" v-if="!fightScreenLoading"> {{ convToDate(selectedFightDate) }} </h2>
+          </div>
+          <div class="column">
+            <FightDropdown
+              v-if="!fightScreenLoading"
+              :pastFightMetaList="fightScreenFights"
+              :curFightId="selectedFightId"
+              @newFightId="switchFightScreenFight"
+            />
+          </div>
         </div>
         <h1 class="w3-xxxlarge" v-if="fightScreenLoading && !fightScreenInitialized"> {{initFightMain()}} </h1>
       </div>

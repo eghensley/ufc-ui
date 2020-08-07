@@ -5,15 +5,15 @@
                 <p class="card-header-title">
                     Bouts
                 </p>
-                <div class="dropdown is-hoverable is-right is-hidden-tablet is-hidden-desktop is-hidden-widescreen">
+                <div class="dropdown is-right is-hidden-tablet is-hidden-desktop is-hidden-widescreen" v-on:click="toggleDropdown()" v-bind:class="{ 'is-active': boutDropDownVis }">
                     <div class="dropdown-trigger">
-                        <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
+                        <button class="button" aria-haspopup="true" aria-controls="bout-dropdown-menu">
                             <span class="icon is-small">
                                 <i class="fas fa-angle-down" aria-hidden="true"></i>
                             </span>
                         </button>
                     </div>
-                    <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                    <div class="dropdown-menu" id="bout-dropdown-menu" role="menu">
                         <div class="dropdown-content" v-for="boutD in boutList" :key="boutD.oid">
                             <a v-on:click="switchBout(boutD)">
                                 {{boutD['fighterBoutXRefs'][0]['fighter']['fighterName']}} VS {{boutD['fighterBoutXRefs'][1]['fighter']['fighterName']}}
@@ -88,7 +88,8 @@ export default {
     data () {
         return {
             selectedFighter: {},
-            isFighterModalVisible: false
+            isFighterModalVisible: false,
+            boutDropDownVis: false
         }
     },
     methods: {
@@ -120,6 +121,13 @@ export default {
         },
         switchBout (boutInfo) {
             this.$emit('switch', boutInfo)
+        },
+        toggleDropdown () {
+            if (this.boutDropDownVis) {
+                this.boutDropDownVis = false
+            } else {
+                this.boutDropDownVis = true
+            }
         }
     }    
 }
