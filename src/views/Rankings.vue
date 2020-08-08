@@ -3,8 +3,8 @@
     <section class="hero is-info welcome is-small" id="myHeader">
       <div class="hero-body">
         <div class="container">
-          <h2 class="title"> Fighter Rankings </h2>
-          <h2 class="subtitle"> {{resolveWeightClass(selectedWeightClass)}} </h2>
+          <h2 class="title"> {{resolveWeightClass(selectedWeightClass)}} </h2>
+          <h2 class="subtitle"> Fighter Rankings </h2>
         </div>
         <h1 class="w3-xxxlarge" v-if="rankingScreenLoading && !rankingScreenInitialized"> {{initRankingMain()}} </h1>
       </div>
@@ -14,6 +14,10 @@
         <div class="container">
             <div class="columns">
                 <RankingAside
+                    :activeWc="selectedWeightClass"
+                    @switchWC="switchWeightClass"
+                />
+                <RankingDropdown
                     :activeWc="selectedWeightClass"
                     @switchWC="switchWeightClass"
                 />
@@ -33,6 +37,7 @@
 
 import RankingAside from '@/components/Ranking/RankingAside.vue'
 import RankingTable from '@/components/Ranking/RankingTable.vue'
+import RankingDropdown from '@/components/Ranking/RankingDropdown.vue'
 
 const rankingWeightClassDict = {
     'WW': 'Welterweight',
@@ -52,7 +57,7 @@ const rankingWeightClassDict = {
 export default {
     name: 'rankings',
     components: {
-        RankingAside, RankingTable
+        RankingAside, RankingTable, RankingDropdown
     },
     data () {
         return {

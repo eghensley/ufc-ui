@@ -62,6 +62,14 @@ export default {
             console.log(error)
         })
     },
+    getBetsFromPastFight (fightId) {
+        return axios.get( springServer + '/ufc/bet/table/fight/' + fightId + '/past', standardHeaders).then(response => {
+            return response.data
+        })
+        .catch(error => {
+            console.log(error)
+        })
+    },
     getBoutBetsFromFight (fightId) {
         return axios.get( springServer + '/ufc/rest/fight/' + fightId + '/details/bet', standardHeaders).then(response => {
             return response.data

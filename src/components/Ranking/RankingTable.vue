@@ -12,24 +12,36 @@
         <div class="card events-card">
             <header class="card-header">
                 <p class="card-header-title">
-                Fighters
+                    Fighters
+                    <a @click="showRankInfoModal()">
+                        <span class="icon">
+                            <i class="fas fa-info-circle"></i>
+                        </span>
+                    </a>
                 </p>
+            </header>
                 <!-- <a href="#" class="card-header-icon" aria-label="more options">
                     <span class="icon">
                         <i class="fa fa-angle-down" aria-hidden="true"></i>
                     </span>
                 </a> -->
-            </header>
             <div class="card-table">
                 <div class="content">
                     <table class="table is-fullwidth is-striped">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Name</th>
+                                <th><abbr title="Percentile of cumulative Elo ranking among weight class peers">Rating</abbr></th>
+                            </tr>
+                        </thead>
                         <tbody>
                             <tr v-for="rank in weightClassRankings" :key="rank.oid">
                                 <td width="5%">
                                     <i class="fa fa-bell-o"></i>
                                 </td>
                                 <td>
-                                    <div> {{rank.name}} </div>
+                                    <a @click="showFighterRankModal(rank)"> {{rank.name}} </a>
                                 </td>
                                 <td>
                                     <div class="is-small"> {{round(rank.total)}} </div>
@@ -43,12 +55,24 @@
                 </div>
             </div>
         </div>
+        <RankingFighterModal
+            v-show="isFighterModalVisible"
+            @closeFighterRank="closeFighterRankModal"
+            :modalFighterRank="selectedFighterRank"
+            :modelFighterRankSeries="selectedModelFighterRankSeries"
+        />
+        <RankingInfoModal
+            v-show="isRankInfoModalVisible"
+            @closeRankInfo="closeRankInfoModal"
+        />
     </div>
 </template>
 
 <script>
 
 import ApiService from '@/services/ApiService.js'
+import RankingFighterModal from '@/components/Ranking/RankingFighterModal.vue'
+import RankingInfoModal from '@/components/Ranking/RankingInfoModal.vue'
 
 const formatter = new Intl.NumberFormat('en-US', {
    minimumFractionDigits: 2,      
@@ -58,7 +82,7 @@ const formatter = new Intl.NumberFormat('en-US', {
 export default {
     name: 'RankingTable',
     components: {
-        
+        RankingFighterModal, RankingInfoModal
     },
     props: {
         weightClass: {type: String, default: 'FW'}
@@ -74,7 +98,11 @@ export default {
         return {
             rankingTableLoading: true,
             rankingTableInitialized: false,
-            weightClassRankings: []
+            weightClassRankings: [],
+            isFighterModalVisible: false,
+            selectedFighterRank: {},
+            isRankInfoModalVisible: false,
+            selectedModelFighterRankSeries: [{name: 'test', data: []}]
         }
     },
     methods: {
@@ -101,6 +129,22 @@ export default {
         },
         round (inDouble) {
             return formatter.format(inDouble)
+        },
+        showFighterRankModal (fighterInfo) {
+            this.selectedFighterRank = fighterInfo
+            this.selectedModelFighterRankSeries =[{name: 'test', data: [fighterInfo.offStrike, fighterInfo.defStrike, fighterInfo.offGrapp, fighterInfo.defGrapp, fighterInfo.offKo, fighterInfo.defKo, fighterInfo.offSub, fighterInfo.defSub]}]
+            this.isFighterModalVisible = true
+        },
+        closeFighterRankModal () {
+            this.selectedFighterRank = {} 
+            this.selectedModelFighterRankSeries = [{name: 'test', data: []}]
+            this.isFighterModalVisible = false
+        },
+        showRankInfoModal () {
+            this.isRankInfoModalVisible = true
+        },
+        closeRankInfoModal () {
+            this.isRankInfoModalVisible = false
         }
     }
 }

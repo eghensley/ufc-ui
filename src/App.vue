@@ -40,7 +40,7 @@
                 Rankings
               </router-link>
 
-              <div class="navbar-item has-dropdown is-hoverable">
+              <div class="navbar-item has-dropdown" role="button" v-on:click="toggleMoreDropdown()" v-bind:class="{ 'is-active': moreDropDownVis }">
                 <a class="navbar-link">
                   More
                 </a>
@@ -86,7 +86,8 @@ export default {
   name: "app",
   data () {
     return {
-      dropDownVis: false
+      dropDownVis: false,
+      moreDropDownVis: false
     }
   },
   methods: {
@@ -95,6 +96,13 @@ export default {
         this.dropDownVis = false
       } else {
         this.dropDownVis = true
+      }
+    },
+    toggleMoreDropdown () {
+      if (this.moreDropDownVis) {
+        this.moreDropDownVis = false
+      } else {
+        this.moreDropDownVis = true
       }
     }
   }

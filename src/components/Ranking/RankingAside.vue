@@ -1,5 +1,5 @@
 <template>
-    <aside class="column is-2 aside">
+    <aside class="column is-2 aside is-hidden-mobile">
         <nav class="menu">
             <p class="menu-label"> Weight Classes </p>
             <ul class="menu-list" v-for="weightClass in weightClasses" :key="weightClass.wc">
@@ -15,7 +15,7 @@
 
 <script>
 export default {
-    name: 'fightAside',
+    name: 'rankingAside',
     props: {
         activeWc: {type: String, default: 'FW'}
     },

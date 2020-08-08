@@ -16,8 +16,11 @@
     />
 
     <FightBetTable
-      v-if="!fightLoading && evalIfFightInFuture(boutData.fightDate)"
+      v-if="!fightLoading"
       :boutInfo="betData"
+      :future="isFutureFight"
+      :totalBet="totBet"
+      :totalResult="totResult"
     />
 
     <div v-if="!fightLoading" class="columns">
@@ -57,9 +60,10 @@ export default {
         fightId: {type: String, default: 'dde70a112e053a6c'}
     },
     watch: { 
-        fightId: function(newVal, oldVal) { // watch it
-            console.log('Prop changed: ', newVal, ' | was: ', oldVal)
+        fightId: function() { // watch it
             this.fightLoading = true
+            this.totResult = 0
+            this.totBet = 0
         }
     },
     data () {
@@ -83,18 +87,23 @@ export default {
         fighter2EloLoaded: false,
         eloChartReady: false,
         fighter1Elo: {},
-        fighter2Elo: {}
+        fighter2Elo: {},
+        isFutureFight: true,
+        totBet: 0,
+        totResult: 0
         }
     },
     methods: {
         initFightPage () {
-            this.getBetsFromFightData()
             this.getBoutsFromFightData()
+            this.getBetsFromFightData()
         },
         evalIfFightInFuture (fightDate) {
-            var selectedDate = new Date(fightDate)
+            var rawDateComps = fightDate.split('T')[0].split('-')
+            var selectedDate = new Date(parseInt(rawDateComps[0]), parseInt(rawDateComps[1])-1, parseInt(rawDateComps[2]) + 1) 
             var now = new Date();
             now.setHours(0,0,0,0);
+            now.setHours(5,0,0,0);
             if (selectedDate < now) {
                 return false
             } else {
@@ -123,12 +132,30 @@ export default {
             return val + idx - idx
         },
         getBetsFromFightData () {
-            ApiService.getBetsFromFight(this.fightId)
-                .then(
-                bets => {
-                    this.betData = bets['response']
-                }
-                ).catch(error => console.log(error))            
+            if (this.isFutureFight) {
+                ApiService.getBetsFromFight(this.fightId)
+                    .then(
+                    bets => {
+                        this.betData = bets['response']
+                        var i;
+                        for (i = 0; i < this.betData.length; i++) {
+                            this.totBet += this.betData[i]['wagerWeight']
+                        }
+                    }
+                    ).catch(error => console.log(error))           
+            } else {
+                ApiService.getBetsFromPastFight(this.fightId)
+                    .then(
+                    bets => {
+                        this.betData = bets['response']
+                        var i;
+                        for (i = 0; i < this.betData.length; i++) {
+                            this.totBet += this.betData[i]['wagerWeight']
+                            this.totResult += this.betData[i]['betResult']
+                        }
+                    }
+                    ).catch(error => console.log(error))        
+            } 
         },
         getBoutsFromFightData () {
             this.fightLoading = true
@@ -136,6 +163,7 @@ export default {
                 .then(
                 bouts => {
                     this.boutData = bouts['response']
+                    this.isFutureFight = this.evalIfFightInFuture(this.boutData.fightDate)
                     this.selectedBout = bouts['response']['bouts'][0]
                     this.fightOid = bouts['response']['oid']
                 }
