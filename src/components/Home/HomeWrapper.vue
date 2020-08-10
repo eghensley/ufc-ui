@@ -1,5 +1,21 @@
 <template>
-    <apexchart v-if="!homeChartLoading" type="line" height="440" :options="chartOptions" :series="betSeries"></apexchart>
+    <div class="card events-card">
+        <header class="card-header">
+            <p class="card-header-title">
+                Algorithm's Performance
+            </p>
+            <a class="card-header-icon" v-on:click="toggleHomeChartVis()">
+                <span class="icon">
+                    <i aria-hidden="true" v-bind:class="{ 'fa fa-angle-up': showHomeChart, 'fa fa-angle-down': !showHomeChart }"></i>
+                </span>
+            </a>
+        </header>
+        <div class="card-content" v-if="showHomeChart">
+            <div class="content">
+                <apexchart v-if="!homeChartLoading" type="line" height="440" :options="chartOptions" :series="betSeries"></apexchart>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -54,6 +70,7 @@ export default {
                     type: 'bar'
                 }
             ],
+            showHomeChart: true,
             chartOptions: {
                 // tooltip: {
                 //     shared: false,
@@ -69,7 +86,7 @@ export default {
                 //     }
                 // },
                 title: {
-                    text: 'Betting Model History  (Event and rolling total result)'
+                    text: 'Event and rolling total results'
                 },
                 xaxis: {
                     categories: [],
@@ -97,6 +114,15 @@ export default {
                     }
                 }
             }         
+        }
+    },
+    methods: {
+        toggleHomeChartVis () {
+            if (this.showHomeChart) {
+                this.showHomeChart = false
+            } else {
+                this.showHomeChart = true
+            }
         }
     }
 }

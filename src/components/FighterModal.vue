@@ -10,7 +10,7 @@
             <section class="modal-card-body">
                 <div class="box notification is-primary">
                     <div class="title"> {{ modalFighter['fighterName'] }} </div>
-                    <div class="heading"> {{ modalFighter['dob'] }} </div>
+                    <div class="heading"> {{ convToDate(modalFighter['dob']) }} </div>
                     <div class="level">
                         <div class="level-item">
                             <div>
@@ -73,7 +73,17 @@ export default {
         },
         resolveStance (myKey) {
             return stanceDict[myKey];
-        }
+        },
+        convToDate (rawDate) {
+            if (rawDate != null) {
+                var rawDateComps = rawDate.split('T')[0].split('-')
+                var date = new Date(parseInt(rawDateComps[0]), parseInt(rawDateComps[1]), parseInt(rawDateComps[2])) 
+                // var date = Date.parse(.replace())//.replace('T', ''))
+                return date.toLocaleDateString()
+            } else {
+                return rawDate
+            }
+        },
     }
 }
 </script>

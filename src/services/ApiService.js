@@ -121,6 +121,14 @@ export default {
             console.log(error)
         })
     },
+    getFighterFightEloStats (fighterOid, fightOid) {
+        return axios.get( springServer + '/ufc/scores/elo/post/fighter/' + fighterOid + '/fight/' + fightOid, standardHeaders).then(response => {
+            return response.data
+        })
+        .catch(error => {
+            console.log(error)
+        })
+    },
     getFightersMissingAgeCount (adminLogin) {
         var adminHeaders = this.buildAdminHeaders(adminLogin)
 
@@ -199,6 +207,14 @@ export default {
             console.log(error)
         })
     },
+    getWeightClassFighterRanking (weightClass, fighterOid) {
+        return axios.get( flaskServer + '/ufc/api/v1.0/rankings/'+weightClass+'/fighter/'+fighterOid, standardHeaders).then(response => {
+            return response.data
+        })
+        .catch(error => {
+            console.log(error)
+        })
+    },
     addFightOddsUrl (adminLogin, fightId, url) {
         var adminHeaders = this.buildAdminHeaders(adminLogin)
 
@@ -240,6 +256,15 @@ export default {
     },
     getBetInfo () {
         return axios.get( springServer + '/ufc/bet/history/v2', standardHeaders).then(response => {
+            return response.data
+        })
+        .catch(error => {
+            console.log(error)
+        })
+    },
+    initFutureBouts (adminLogin) {
+        var adminHeaders = this.buildAdminHeaders(adminLogin)
+        return axios.get( flaskServer + '/ufc/api/v1.0/populate/future', adminHeaders).then(response => {
             return response.data
         })
         .catch(error => {

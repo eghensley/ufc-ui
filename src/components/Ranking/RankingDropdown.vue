@@ -1,26 +1,22 @@
 <template>
-    <div class="column is-12 is-hidden-tablet is-hidden-desktop is-hidden-widescreen">
-        <div class="dropdown" v-on:click="toggleDropdown()" v-bind:class="{ 'is-active': weightClassDropDownVis }">
-            <div class="dropdown-trigger">
-                <button class="button" aria-haspopup="true" aria-controls="rank-weight-class-dropdown">
-                <span>Currently selected: <strong>{{ resolveWeightClass(activeWc) }}</strong>. Change: </span>
+    <li class="is-hidden-tablet is-hidden-desktop is-hidden-widescreen">
+        <a class="dropdown" v-on:click="toggleDropdown()" v-bind:class="{ 'is-active': weightClassDropDownVis }">
+            <button class="button" aria-haspopup="true" aria-controls="rank-weight-class-dropdown">
+                <span><strong>{{ resolveWeightClass(activeWc) }}</strong></span>
                 <span class="icon is-small">
-                    <i class="fas fa-angle-down" aria-hidden="true"></i>
+                    <i aria-hidden="true" v-bind:class="{ 'fas fa-angle-up': weightClassDropDownVis, 'fas fa-angle-down': !weightClassDropDownVis }"></i>
                 </span>
-                </button>
-            </div>
+            </button>
             <div class="dropdown-menu" id="rank-weight-class-dropdown" role="menu">
-                <div class="dropdown-content">
-                    <div v-for="weightClass in weightClasses" :key="weightClass.wc">
-                        <a v-on:click="changeWeightClass(weightClass.wc)" v-bind:class="{ 'is-alert': evalIfActive(weightClass.wc) }">
-                            {{ weightClass.name }}
-                        </a>
-                        <hr class="dropdown-divider">
-                    </div>
+                <div class="dropdown-content" v-for="weightClass in weightClasses" :key="weightClass.wc">
+                    <a class="dropdown-item" v-on:click="changeWeightClass(weightClass.wc)" v-bind:class="{ 'is-active': evalIfActive(weightClass.wc) }">
+                        {{ weightClass.name }}
+                    </a>
+                    <hr class="dropdown-divider">
                 </div>
             </div>
-        </div>
-    </div>
+        </a>
+    </li>
 </template>
 
 <script>

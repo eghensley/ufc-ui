@@ -1,5 +1,22 @@
 <template>
-    <div class="dropdown is-left" v-on:click="toggleDropdown()" v-bind:class="{ 'is-active': fightDropDownVis }">
+    <li class="is-hidden-tablet is-hidden-desktop is-hidden-widescreen">
+        <a class="dropdown is-left" v-on:click="toggleDropdown()" v-bind:class="{ 'is-active': fightDropDownVis }">
+            <button class="button" aria-haspopup="true" aria-controls="fight-dropdown-menu">
+                <span><strong>{{curFightName}}</strong></span>
+                <span class="icon is-small">
+                    <i class="fas fa-angle-down" aria-hidden="true"></i>
+                </span>
+            </button>
+            <div class="dropdown-menu" id="fight-dropdown-menu" role="menu">
+                <div class="dropdown-content" v-for="fight in pastFightMetaList" :key="fight.oid">
+                    <a class="dropdown-item" v-bind:class="{ 'is-active': isFightActive(fight) }" v-on:click="newfight(fight['fightId'])">
+                       {{fight['fightName']}}
+                    </a>
+                </div>
+            </div>
+        </a>
+    </li>
+    <!-- <div class="dropdown is-left" v-on:click="toggleDropdown()" v-bind:class="{ 'is-active': fightDropDownVis }">
         <div class="dropdown-trigger">
             <button class="button" aria-haspopup="true" aria-controls="fight-dropdown-menu">
                 <span>Change Fight</span>
@@ -16,7 +33,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 </template>
 
 <script>
@@ -24,7 +41,8 @@ export default {
     name: "fightDropdown",
     props: {
         pastFightMetaList: {type: Array, default: function () { return []}},
-        curFightId: {type: String, default: null}
+        curFightId: {type: String, default: null},
+        curFightName: {type: String, default: null}
     },
     data () {
         return {
@@ -40,7 +58,7 @@ export default {
             }
         },
         newfight (newFightId) {
-            this.$emit('newFightId', newFightId)
+            this.$emit('switchFight', newFightId)
         },
         toggleDropdown() {
             if (this.fightDropDownVis) {

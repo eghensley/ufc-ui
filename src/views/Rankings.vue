@@ -11,22 +11,37 @@
     </section>
 
     <section class="section">
+        <nav class="breadcrumb" aria-label="breadcrumbs">
+            <ul>
+                <li>
+                    <router-link to="/">    
+                        Bet UFC
+                    </router-link>
+                </li>
+                <li>
+                    <a>Rankings</a>
+                </li>
+                <li class="is-active is-hidden-mobile">
+                    <a>{{resolveWeightClass(selectedWeightClass)}}</a>
+                </li>
+                <RankingDropdown
+                    :activeWc="selectedWeightClass"
+                    @switchWC="switchWeightClass"
+                />
+            </ul>
+        </nav>
         <div class="container">
             <div class="columns">
                 <RankingAside
                     :activeWc="selectedWeightClass"
                     @switchWC="switchWeightClass"
                 />
-                <RankingDropdown
-                    :activeWc="selectedWeightClass"
-                    @switchWC="switchWeightClass"
+                
+                <RankingTable
+                    v-if="!rankingScreenLoading"
+                    :weightClass="selectedWeightClass"
                 />
-                <main class="column main">
-                    <RankingTable
-                        v-if="!rankingScreenLoading"
-                        :weightClass="selectedWeightClass"
-                    />
-                </main>
+                
             </div>
         </div>
     </section>

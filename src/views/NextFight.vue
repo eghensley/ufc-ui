@@ -7,14 +7,14 @@
             <h2 class="title" v-if="!fightScreenLoading"> {{ selectedFightName }} </h2>
             <h2 class="subtitle" v-if="!fightScreenLoading"> {{ convToDate(selectedFightDate) }} </h2>
           </div>
-          <div class="column">
+          <!-- <div class="column">
             <FightDropdown
               v-if="!fightScreenLoading"
               :pastFightMetaList="fightScreenFights"
               :curFightId="selectedFightId"
               @newFightId="switchFightScreenFight"
             />
-          </div>
+          </div> -->
         </div>
         <h1 class="w3-xxxlarge" v-if="fightScreenLoading && !fightScreenInitialized"> {{initFightMain()}} </h1>
       </div>
@@ -22,6 +22,9 @@
     <FightWrapper
       v-if="!fightScreenLoading"
       :fightId="selectedFightId"
+      :fightName="selectedFightName"
+      @newFightId="switchFightScreenFight"
+      :fightMetaList="fightScreenFights"
     />
   </div>
 </template>
@@ -29,12 +32,12 @@
 <script>
 import ApiService from '@/services/ApiService.js'
 import FightWrapper from '@/components/Fight/FightWrapper.vue'
-import FightDropdown from '@/components/FightDropdown.vue'
+//import FightDropdown from '@/components/FightDropdown.vue'
 
 export default {
   name: 'fight',
   components: {
-    FightWrapper, FightDropdown
+    FightWrapper
   },
   data () {
     return {

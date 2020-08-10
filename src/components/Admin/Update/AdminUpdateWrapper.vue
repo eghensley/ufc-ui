@@ -53,7 +53,7 @@
                         </tbody>
                     </table>
                     <footer class="card-footer">
-                        <a>Placeholder Footer..</a>
+                         <a v-on:click="initFuture">Initialize future fight</a>
                     </footer>
                 </div>
             </div>
@@ -136,6 +136,26 @@ export default {
         },
         hideBouts () {
             this.updateBoutsVisible = false
+        },
+        initFuture () {
+            this.adminUpdateLoading = true
+            ApiService.initFutureBouts(this.pw)
+                .then(resp => {
+                    if (resp.status === 'OK') {
+                        ApiService.getRecentFights()
+                        .then(
+                        fights => {
+                            this.pastFightMeta = fights['response']//.slice(1, fights.length)
+                        }
+                        ).catch(error => console.log(error))
+                        .finally(
+                            () => {
+                                this.adminUpdateLoading = false 
+                            }
+                        )
+                    }
+                }
+            ).catch(error => console.log(error))            
         }
     }
 }

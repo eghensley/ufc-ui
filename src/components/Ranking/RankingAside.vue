@@ -1,5 +1,5 @@
 <template>
-    <aside class="column is-2 aside is-hidden-mobile">
+    <aside class="column is-one-fifth aside is-hidden-mobile">
         <nav class="menu">
             <p class="menu-label"> Weight Classes </p>
             <ul class="menu-list" v-for="weightClass in weightClasses" :key="weightClass.wc">

@@ -16,22 +16,55 @@
         <h1 class="w3-xxxlarge" v-if="homeScreenLoading && !homeScreenInitialized"> {{initHomeMain()}} </h1>
       </div>
     </section>
+        <section class="section">
+            <nav class="breadcrumb" aria-label="breadcrumbs">
+                <ul>
+                    <li><a>Bet UFC</a></li>
+                    <li class="is-active">
+                        <a>Home</a>
+                    </li>
+                </ul>
+            </nav>
+            <section class="container">
+                <div class="columns">
+                    <aside class="column is-one-fifth aside">
+                        <nav class="menu">
+                            <p class="menu-label"> Pages </p>
+                            <ul class="menu-list">
+                                <li>
+                                    <a class="is-active">
+                                        Home
+                                    </a>
+                                </li>
+                                <li>
+                                    <router-link to="/fights">
+                                        Fights
+                                    </router-link>
+                                </li>
+                                <li>
+                                    <router-link to="/rankings">
+                                        Rankings
+                                    </router-link>
+                                </li>
+                            </ul>
+                        </nav>
+                    </aside>
+                    <main class="column main">
+                        <FightBetTable
+                        v-if="!fightLoading"
+                        :boutInfo="betData"
+                        :future="fightInFuture"
+                        :totalBet="totBet"
+                        :totalResult="totResult"
+                        />
+                        <HomeWrapper
 
-    <!-- <section class="container">
-
-    </section> -->
-
-    <FightBetTable
-      v-if="!fightLoading"
-      :boutInfo="betData"
-      :future="fightInFuture"
-      :totalBet="totBet"
-      :totalResult="totResult"
-    />
-    <HomeWrapper
-
-    />
-  </div>
+                        />
+                    </main>
+                </div>
+            </section>
+        </section>
+    </div>
 </template>
 
 <script>
@@ -94,7 +127,9 @@ export default {
                         this.betData = bets['response']
                         var i;
                         for (i = 0; i < this.betData.length; i++) {
-                            this.totBet += this.betData[i]['wagerWeight']
+                            if (this.betData[i]['bet']) {
+                                this.totBet += this.betData[i]['wagerWeight']
+                            }
                         }
                     }
                     ).catch(error => console.log(error)).finally(

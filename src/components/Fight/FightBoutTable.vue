@@ -1,38 +1,32 @@
 <template>
-    <div class="column is-6">
-        <div class="card events-card">
-            <header class="card-header">
-                <p class="card-header-title">
-                    Bouts
-                </p>
-                <div class="dropdown is-right is-hidden-tablet is-hidden-desktop is-hidden-widescreen" v-on:click="toggleDropdown()" v-bind:class="{ 'is-active': boutDropDownVis }">
-                    <div class="dropdown-trigger">
-                        <button class="button" aria-haspopup="true" aria-controls="bout-dropdown-menu">
-                            <span class="icon is-small">
-                                <i class="fas fa-angle-down" aria-hidden="true"></i>
-                            </span>
-                        </button>
-                    </div>
-                    <div class="dropdown-menu" id="bout-dropdown-menu" role="menu">
-                        <div class="dropdown-content" v-for="boutD in boutList" :key="boutD.oid">
-                            <a v-on:click="switchBout(boutD)">
-                                {{boutD['fighterBoutXRefs'][0]['fighter']['fighterName']}} VS {{boutD['fighterBoutXRefs'][1]['fighter']['fighterName']}}
-                            </a>
-                        </div>
-                    </div>
+    <li class="is-hidden-tablet is-hidden-desktop is-hidden-widescreen">
+        <a class="dropdown is-right" v-on:click="toggleDropdown()" v-bind:class="{ 'is-active': boutDropDownVis }">
+            <button class="button" aria-haspopup="true" aria-controls="bout-dropdown-menu">
+                <span><strong>{{ boutName }}</strong></span>
+                <span class="icon is-small">
+                    <i class="fas fa-angle-down" aria-hidden="true"></i>
+                </span>
+            </button>
+            <div class="dropdown-menu" id="bout-dropdown-menu" role="menu">
+                <div class="dropdown-content" v-for="boutD in boutList" :key="boutD.oid">
+                    <a class="dropdown-item" v-on:click="switchBout(boutD)" v-bind:class="{ 'is-active': evalIfBoutSelected(boutD) }">
+                        {{boutD['fighterBoutXRefs'][0]['fighter']['fighterName']}} VS {{boutD['fighterBoutXRefs'][1]['fighter']['fighterName']}}
+                    </a>
                 </div>
-                <!-- <a href="#" class="card-header-icon" aria-label="more options">
-                    <span class="icon">
-                        <i class="fa fa-angle-down" aria-hidden="true"></i>
-                    </span>
-                </a> -->
-            </header>
+            </div>
+        </a>
+    </li>
+            <!-- </header>
             <div class="card-table">
                 <div class="content">
                     <table class="table is-fullwidth is-striped">
                         <tbody>
                             <tr v-for="bout in boutList" :key="bout.oid" v-bind:class="{ 'is-hidden-mobile': !evalIfBoutSelected(bout)}">
-                                <td width="5%"><i class="fa fa-bell-o"></i></td>
+                                <td width="5%">
+                                    <span class="icon is-small">
+                                        <i class="fas fa-crown" v-if="bout.champBout"></i>
+                                    </span>
+                                </td>
                                 <td>
                                     <a @click="showFighterModal(bout['fighterBoutXRefs'][0]['fighter'])"> {{bout['fighterBoutXRefs'][0]['fighter']['fighterName']}} </a>
                                     <div class="is-small"> {{convImpProbToAmerOdds(bout['fighterBoutXRefs'][0]['mlOdds'])}} </div>
@@ -51,17 +45,17 @@
                     </table>
                 </div>
             </div>
-        </div>
-        <FighterModal
-        v-show="isFighterModalVisible"
-        @closeFighter="closeFighterModal"
-        :modalFighter="selectedFighter"
+        </div> -->
+        <!-- <FighterModal
+            v-show="isFighterModalVisible"
+            @closeFighter="closeFighterModal"
+            :modalFighter="selectedFighter"
         />
-    </div>
+    </div> -->
 </template>
 
 <script>
-import FighterModal from '@/components/FighterModal.vue'
+//import FighterModal from '@/components/FighterModal.vue'
 
 const formatter = new Intl.NumberFormat('en-US', {
    minimumFractionDigits: 2,      
@@ -71,7 +65,7 @@ const formatter = new Intl.NumberFormat('en-US', {
 export default {
     name: 'fightBoutTable',
     components: {
-        FighterModal
+        //FighterModal
     },
     props: {
         boutList: {
@@ -83,7 +77,8 @@ export default {
             type: Object, default: function () { 
                 return {'boutId': null}
             }            
-        }
+        },
+        boutName: {type: String, default: ''}
     },
     data () {
         return {

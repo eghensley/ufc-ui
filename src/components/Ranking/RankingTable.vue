@@ -1,5 +1,5 @@
 <template>
-    <div class="column is-12"> 
+    <main class="column main is-four-fifths">
         <section v-if="rankingTableLoading" class="hero is-info is-small" id="loadingRibbon">
             <div class="container">
                 <h1 class="title"> Loading ... </h1>
@@ -65,7 +65,7 @@
             v-show="isRankInfoModalVisible"
             @closeRankInfo="closeRankInfoModal"
         />
-    </div>
+    </main>
 </template>
 
 <script>
@@ -132,7 +132,7 @@ export default {
         },
         showFighterRankModal (fighterInfo) {
             this.selectedFighterRank = fighterInfo
-            this.selectedModelFighterRankSeries =[{name: 'test', data: [fighterInfo.offStrike, fighterInfo.defStrike, fighterInfo.offGrapp, fighterInfo.defGrapp, fighterInfo.offKo, fighterInfo.defKo, fighterInfo.offSub, fighterInfo.defSub]}]
+            this.selectedModelFighterRankSeries =[{name: fighterInfo.name, data: [fighterInfo.offStrike, fighterInfo.defStrike, fighterInfo.offGrapp, fighterInfo.defGrapp, fighterInfo.offKo, fighterInfo.defKo, fighterInfo.offSub, fighterInfo.defSub]}]
             this.isFighterModalVisible = true
         },
         closeFighterRankModal () {
