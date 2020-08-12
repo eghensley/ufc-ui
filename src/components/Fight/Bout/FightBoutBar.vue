@@ -1,7 +1,19 @@
 <template>
-    <div class="card events-card">
+  <transition name="modal-fade">
+    <div class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title">Direct Elo Comparison</p>
+                <button class="delete" aria-label="close" @click="close"></button>
+            </header>
+            <section class="modal-card-body">
 
-        <header class="card-header">
+
+
+    <!-- <div class="card events-card is-shadow-dreamy"> -->
+
+        <!-- <header class="card-header">
             <p class="card-header-title">
                 <span>
                     Direct Stat Comparison
@@ -9,11 +21,11 @@
             </p>
             <a class="card-header-icon" v-on:click="toggleBoutBarVis()">
                 <span class="icon">
-                    <i aria-hidden="true" v-bind:class="{ 'fa fa-angle-up': showBoutBar, 'fa fa-angle-down': !showBoutBar }"></i>
+                    <i aria-hidden="true" v-bind:class="{ 'fas fa-chevron-circle-up': showBoutBar, 'fas fa-chevron-circle-down': !showBoutBar }"></i>
                 </span>
             </a>
         </header>
-        <div class="card-content" v-if="showBoutBar">
+        <div class="card-content" v-if="showBoutBar"> -->
             <div class="content">
                 <div class="subtitle">
                     Direct comparison of fighter scores across 8 Elo attributes at the time of the fight.
@@ -28,11 +40,26 @@
                     One or both fighters lack data required to populate comparison charts
                 </div>                  
             </div>
+        <!-- </div> -->
+    <!-- </div> -->
+
+
+            </section>
+            <footer class="modal-card-foot">
+                <!-- <button class="button is-success">Save changes</button> -->
+                <button class="button" @click="close">Cancel</button>
+            </footer>
         </div>
     </div>
+  </transition>
 </template>
 
 <script>
+
+const rounder = new Intl.NumberFormat('en-US', {
+   minimumFractionDigits: 2,      
+   maximumFractionDigits: 2,
+})
 
 import VueApexCharts from 'vue-apexcharts'
 
@@ -54,6 +81,9 @@ export default {
             } else {
                 this.showBoutBar = true
             }
+        },
+        close () {
+            this.$emit('closeDirectEloModal')
         }
     },
     data () {
@@ -65,7 +95,7 @@ export default {
                     height: 440,
                     stacked: true
                 },
-                colors: ['#a0e3b7', '#d44446'],
+                colors: ['#5bc0de70', '#ee605b71'],
                 plotOptions: {
                     bar: {
                         horizontal: true,
@@ -90,10 +120,18 @@ export default {
                     min: -.2,
                     max: .2,
                     title: {
-
+                        style: {
+                            color: '#fafafa'
+                        }
+                    },
+                    labels: {
+                        style: {
+                            colors: '#fafafa'
+                        }
                     }
                 },
                 tooltip: {
+                    theme: 'dark',
                     shared: false,
                     x: {
                         formatter: function (val) {
@@ -102,23 +140,34 @@ export default {
                     },
                     y: {
                         formatter: function (val) {
-                            return Math.abs(val) + '%'
+                            return '+' + rounder.format(Math.abs(val * 100)) + '%'
                         }
                     }
                 },
                 title: {
                     text: ''
                 },
+                legend: {
+                    labels: {
+                        colors: '#fafafa'
+                    }
+                },
                 xaxis: {
                     categories: ['Striking Offense', 'Striking Defense', 'Grappling Offense', 'Grappling Defense', 'KO Power', 'Chin', 'Submission', 'Evasiveness'],
                     title: {
-                        text: 'Elo Rating Advantage'
+                        text: 'Elo Rating Advantage',
+                        style: {
+                            color: '#fafafa'
+                        }
                     },
                     labels: {
                         formatter: function (val) {
                             val = ""
                             return val 
                             // return Math.abs(Math.round(val)) 
+                        },
+                        style: {
+                            colors: '#fafafa'
                         }
                     }
                 }
@@ -127,3 +176,13 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+  .modal {
+    background: #FFFFFF;
+    box-shadow: 2px 2px 20px 1px;
+    overflow-x: auto;
+    display: flex;
+    flex-direction: column;
+  }
+</style>

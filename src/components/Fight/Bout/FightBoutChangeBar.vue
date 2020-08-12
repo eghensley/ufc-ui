@@ -1,5 +1,15 @@
 <template>
-    <div class="card events-card" v-if="!isFuture">
+
+  <transition name="modal-fade">
+    <div class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title">ELO Changes Following Fight</p>
+                <button class="delete" aria-label="close" @click="close"></button>
+            </header>
+            <section class="modal-card-body">
+    <!-- <div class="card events-card" v-if="!isFuture">
 
         <header class="card-header">
             <p class="card-header-title">
@@ -13,7 +23,7 @@
                 </span>
             </a>
         </header>
-        <div class="card-content" v-if="showBoutChangeBar">
+        <div class="card-content" v-if="showBoutChangeBar"> -->
             <div class="content">
                 <div class="subtitle">
                     Changes to the fighters' Elo attributes based on their fight performance
@@ -25,8 +35,17 @@
                     One or both fighters lack data required to populate comparison charts
                 </div>                  
             </div>
+        <!-- </div>
+    </div> -->
+
+                </section>
+            <footer class="modal-card-foot">
+                <!-- <button class="button is-success">Save changes</button> -->
+                <button class="button" @click="close">Cancel</button>
+            </footer>
         </div>
     </div>
+  </transition>
 </template>
 
 <script>
@@ -59,6 +78,9 @@ export default {
         },
         round (inDouble) {
             return formatter.format(inDouble)
+        },
+        close () {
+            this.$emit('closeEloChangeModal')
         }
     },
     data () {
@@ -69,7 +91,7 @@ export default {
                     type: 'bar',
                     height: 350
                 },
-                colors: ['#a0e3b7', '#d44446'],
+                colors: ['#5bc0de70', '#ee605b71'],
                 plotOptions: {
                     bar: {
                         columnWidth: '80%',
@@ -81,23 +103,50 @@ export default {
                     yaxis: {
                         title: {
                             text: 'Elo Attribute Change',
+                                                    style: {
+                            color: '#fafafa'
+                        }
                         },
                         labels: {
                             formatter: function (y) {
                                 return y + "%";
-                            }
+                            },
+                        style: {
+                            colors: '#fafafa'
+                        }
                         },
                         min: -100,
                         max: 100,
                     },
+                legend: {
+                    labels: {
+                        colors: '#fafafa'
+                    }
+                },
                     xaxis: {
                         categories: ['Striking Offense', 'Striking Defense', 'Grappling Offense', 'Grappling Defense', 'KO Power', 'Chin', 'Submission', 'Evasiveness'],
                         labels: {
-                            rotate: -45
+                            rotate: -45,
+                                                    style: {
+                            colors: '#fafafa'
                         }
-                    }
+                        }
+                    },
+                tooltip: {
+                    theme: 'dark'
+                }
                 },        
             }
     }
 }
 </script>
+
+<style scoped>
+  .modal {
+    background: #FFFFFF;
+    box-shadow: 2px 2px 20px 1px;
+    overflow-x: auto;
+    display: flex;
+    flex-direction: column;
+  }
+</style>

@@ -1,15 +1,6 @@
 <template>
   <div class="container">
-    <section class="hero is-info welcome is-small" id="myHeader">
-      <div class="hero-body">
-        <div class="container">
-          <h2 class="title"> {{resolveWeightClass(selectedWeightClass)}} </h2>
-          <h2 class="subtitle"> Fighter Rankings </h2>
-        </div>
-        <h1 class="w3-xxxlarge" v-if="rankingScreenLoading && !rankingScreenInitialized"> {{initRankingMain()}} </h1>
-      </div>
-    </section>
-
+    <h1 class="w3-xxxlarge" v-if="rankingScreenLoading && !rankingScreenInitialized"> {{initRankingMain()}} </h1>
     <section class="section">
         <nav class="breadcrumb" aria-label="breadcrumbs">
             <ul>
@@ -18,16 +9,12 @@
                         Bet UFC
                     </router-link>
                 </li>
-                <li>
-                    <a>Rankings</a>
+                <li v-bind:class="{ 'is-active': !evalIfWeightClassSelected() }">
+                    <a @click="resetSelectedWeightClass()">Rankings</a>
                 </li>
-                <li class="is-active is-hidden-mobile">
+                <li class="is-active" v-if="evalIfWeightClassSelected()"   >
                     <a>{{resolveWeightClass(selectedWeightClass)}}</a>
                 </li>
-                <RankingDropdown
-                    :activeWc="selectedWeightClass"
-                    @switchWC="switchWeightClass"
-                />
             </ul>
         </nav>
         <div class="container">
@@ -36,11 +23,30 @@
                     :activeWc="selectedWeightClass"
                     @switchWC="switchWeightClass"
                 />
-                
-                <RankingTable
-                    v-if="!rankingScreenLoading"
-                    :weightClass="selectedWeightClass"
-                />
+                <main class="column main is-four-fifths">
+                    <section class="hero is-primary welcome is-small is-shadow-sharp" id="myHeader">
+                        <div class="hero-body">
+                            <div class="container">
+                                <h2 class="title"> Fighter Rankings </h2>
+                                <h2 class="subtitle" v-if="evalIfWeightClassSelected()"> {{resolveWeightClass(selectedWeightClass)}} </h2>
+                                <h2 class="subtitle" v-if="!evalIfWeightClassSelected()"> Please select a weight class </h2>
+                            </div>
+                            
+                        </div>
+                    </section>
+
+                    <br>
+                    <RankingTable
+                        v-if="!rankingScreenLoading && evalIfWeightClassSelected()"
+                        :weightClass="selectedWeightClass"
+                        @switchWC="switchWeightClass"
+                    />
+                    <TopRankingTable
+                        v-if="!rankingScreenLoading && !evalIfWeightClassSelected()"
+                        :weightClass="selectedWeightClass"
+                        @switchWC="switchWeightClass"
+                    />
+                </main>
                 
             </div>
         </div>
@@ -51,8 +57,10 @@
 <script>
 
 import RankingAside from '@/components/Ranking/RankingAside.vue'
+import TopRankingTable from '@/components/Ranking/TopRankingTable.vue'
 import RankingTable from '@/components/Ranking/RankingTable.vue'
-import RankingDropdown from '@/components/Ranking/RankingDropdown.vue'
+
+// import RankingDropdown from '@/components/Ranking/RankingDropdown.vue'
 
 const rankingWeightClassDict = {
     'WW': 'Welterweight',
@@ -72,13 +80,13 @@ const rankingWeightClassDict = {
 export default {
     name: 'rankings',
     components: {
-        RankingAside, RankingTable, RankingDropdown
+        RankingAside, TopRankingTable, RankingTable
     },
     data () {
         return {
             rankingScreenLoading: true,
             rankingScreenInitialized: false,
-            selectedWeightClass: 'FW',
+            selectedWeightClass: ''
         }
     },
     methods: {
@@ -86,11 +94,20 @@ export default {
             return rankingWeightClassDict[myKey];
         },
         initRankingMain () {
-            console.log('init rankings')
             this.rankingScreenLoading = false
         },
         switchWeightClass (wc) {
             this.selectedWeightClass = wc
+        },
+        evalIfWeightClassSelected () {
+            if (this.selectedWeightClass === '') {
+                return false
+            } else {
+                return true
+            }
+        },
+        resetSelectedWeightClass () {
+            this.selectedWeightClass = ''
         }
     }
 }

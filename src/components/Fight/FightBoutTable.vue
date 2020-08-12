@@ -1,5 +1,5 @@
 <template>
-    <li class="is-hidden-tablet is-hidden-desktop is-hidden-widescreen">
+    <div class="is-hidden-tablet is-hidden-desktop is-hidden-widescreen">
         <a class="dropdown is-right" v-on:click="toggleDropdown()" v-bind:class="{ 'is-active': boutDropDownVis }">
             <button class="button" aria-haspopup="true" aria-controls="bout-dropdown-menu">
                 <span><strong>{{ boutName }}</strong></span>
@@ -15,7 +15,7 @@
                 </div>
             </div>
         </a>
-    </li>
+    </div>
             <!-- </header>
             <div class="card-table">
                 <div class="content">

@@ -1,58 +1,33 @@
 <template>
   <div class="nextFight">
-    <section v-if="fightLoading" class="hero is-info is-small" id="loadingRibbon">
-      <div class="container">
-        <h1 class="title"> Loading ... </h1>
-        <a class="navbar-item is--brand">
-          <img class="navbar-brand-logo" src="@/assets/loading.gif" alt="Loading">
-        </a>
-        <h1 class="w3-xxxlarge" v-if="fightLoading"> {{initFightPage()}} </h1>
-      </div>
-    </section>
-
-    <section class="section">
-        <nav class="breadcrumb" aria-label="breadcrumbs">
-            <ul>
-                <li>
-                    <router-link to="/">
-                        Bet UFC
-                    </router-link>
-                </li>
-                <FightDropdown
-                    :pastFightMetaList="fightMetaList"
-                    :curFightId="fightId"
-                    :curFightName="fightName"
-                    @switchFight="newFight"
-                />
-                <li class="is-active is-hidden-mobile">
-                    <a>{{fightName}}</a>
-                </li>
-                <li class="is-active is-hidden-mobile">
-                    <a>{{selectedBoutName}}</a>
-                </li>
-                <FightBoutTable
-                    :boutList="boutData['bouts']"
-                    :selBout="selectedBout"
-                    @switch="changeBout"
-                    :boutName="selectedBoutName"
-                    :curBoutId="selectedBoutId"
-                />
-
-            </ul>
-        </nav>
-
+        <!-- <section class="container">
+            <FightDropdown
+                :pastFightMetaList="fightMetaList"
+                :curFightId="fightId"
+                :curFightName="fightName"
+                @switchFight="newFight"
+            />
+            <FightBoutTable
+                :boutList="boutData['bouts']"
+                :selBout="selectedBout"
+                @switch="changeBout"
+                :boutName="selectedBoutName"
+                :curBoutId="selectedBoutId"
+            />
+        </section> -->
         <section class="container">
-            <div v-if="!fightLoading" class="columns">
-                <FightBoutAside
-                    :pastFightMetaList="fightMetaList"
-                    :boutList="boutData['bouts']"
-                    @switchBout="changeBout"
-                    @switchFight="newFight"
-                    :curFightId="fightId"
-                    :curBoutId="selectedBoutId"
-                />
+            <div class="columns">
 
                 <main class="column main">
+                    <section v-if="fightLoading" class="hero is-info is-small" id="loadingRibbon">
+                        <div class="container">
+                            <h1 class="title"> Loading ... </h1>
+                            <a class="navbar-item is--brand">
+                                <img class="navbar-brand-logo" src="@/assets/loading.gif" alt="Loading">
+                            </a>
+                            <h1 class="w3-xxxlarge" v-if="fightLoading"> {{initFightPage()}} </h1>
+                        </div>
+                    </section>
                     <FightInfo
                         v-if="!fightLoading"
                         :fightLocation="boutData['location']"
@@ -93,7 +68,6 @@
                 </main>
             </div>
         </section>
-    </section>
   </div>
 </template>
 
@@ -170,6 +144,7 @@ export default {
             fighter1Elo: {},
             fighter2Elo: {},
             selectedBoutName: '',
+            abbrevBoutName: '',
             selectedBoutId: '',
             isFutureFight: true,
             totBet: 0,
@@ -224,36 +199,6 @@ export default {
             idx += 0
             return val + idx - idx
         },
-        getBetsFromFightData () {
-            this.totBet = 0
-            this.totResult = 0
-            if (this.isFutureFight) {
-                ApiService.getBetsFromFight(this.fightId)
-                    .then(
-                    bets => {
-                        this.betData = bets['response']
-                        var i;
-                        for (i = 0; i < this.betData.length; i++) {
-                            if (this.betData[i]['bet']) {
-                                this.totBet += this.betData[i]['wagerWeight']
-                            }
-                        }
-                    }
-                    ).catch(error => console.log(error))           
-            } else {
-                ApiService.getBetsFromPastFight(this.fightId)
-                    .then(
-                    bets => {
-                        this.betData = bets['response']
-                        var i;
-                        for (i = 0; i < this.betData.length; i++) {
-                            this.totBet += this.betData[i]['wagerWeight']
-                            this.totResult += this.betData[i]['betResult']
-                        }
-                    }
-                    ).catch(error => console.log(error))        
-            } 
-        },
         getBoutsFromFightData () {
             this.fightLoading = true
             ApiService.getBasicBoutsFromFight(this.fightId)
@@ -263,6 +208,7 @@ export default {
                     this.isFutureFight = this.evalIfFightInFuture(this.boutData.fightDate)
                     this.selectedBout = bouts['response']['bouts'][0]
                     this.selectedBoutName = this.selectedBout['fighterBoutXRefs'][0]['fighter']['fighterName'] + ' VS '+ this.selectedBout['fighterBoutXRefs'][1]['fighter']['fighterName']
+                    this.abbrevBoutName = this.selectedBout['fighterBoutXRefs'][0]['fighter']['fighterName'].split(' ')[this.selectedBout['fighterBoutXRefs'][0]['fighter']['fighterName'].split(' ').length -1] + ' vs '+ this.selectedBout['fighterBoutXRefs'][1]['fighter']['fighterName'].split(' ')[this.selectedBout['fighterBoutXRefs'][1]['fighter']['fighterName'].split(' ').length - 1]
                     this.selectedBoutId = this.selectedBout.boutId
                     if (this.isFutureFight) {
                         this.pullFighterWcRanking()
@@ -461,6 +407,7 @@ export default {
             this.eloChangeChartReady = false
             this.selectedBout = boutInfo
             this.selectedBoutName = this.selectedBout['fighterBoutXRefs'][0]['fighter']['fighterName'] + ' VS '+ this.selectedBout['fighterBoutXRefs'][1]['fighter']['fighterName']
+            this.abbrevBoutName = this.selectedBout['fighterBoutXRefs'][0]['fighter']['fighterName'].split(' ')[this.selectedBout['fighterBoutXRefs'][0]['fighter']['fighterName'].split(' ').length -1] + ' vs '+ this.selectedBout['fighterBoutXRefs'][1]['fighter']['fighterName'].split(' ')[this.selectedBout['fighterBoutXRefs'][1]['fighter']['fighterName'].split(' ').length - 1]
             this.selectedBoutId = this.selectedBout.boutId
             if (this.isFutureFight) {
                 this.selectedBoutRankSeries = [
@@ -485,6 +432,15 @@ export default {
         newFight (newFightId) {
             this.$emit('newFightId', newFightId)
         },
+        abbrevFightName () {
+            return this.fightName.split(':')[1]
+        },
+    convToDate (rawDate) {
+        var rawDateComps = rawDate.split('T')[0].split('-')
+        var date = new Date(parseInt(rawDateComps[0]), parseInt(rawDateComps[1]), parseInt(rawDateComps[2])) 
+        // var date = Date.parse(.replace())//.replace('T', ''))
+        return date.toLocaleDateString()
+    }
     }
 }
 </script>

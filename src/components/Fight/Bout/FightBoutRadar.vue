@@ -1,7 +1,16 @@
 <template>
-    <div class="card events-card" v-if="isFuture">
+  <transition name="modal-fade">
+    <div class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title">Direct Elo Comparison</p>
+                <button class="delete" aria-label="close" @click="close"></button>
+            </header>
+            <section class="modal-card-body">
+    <!-- <div class="card events-card" v-if="isFuture"> -->
 
-        <header class="card-header">
+        <!-- <header class="card-header">
             <p class="card-header-title">
                 <span>
                     Relative Elo Rank Breakdown
@@ -13,7 +22,7 @@
                 </span>
             </a>
         </header>
-        <div class="card-content" v-if="showBoutRadar">
+        <div class="card-content" v-if="showBoutRadar"> -->
             <div class="content">
                 <div class="subtitle">
                     Comparison of 8 Elo attributes for each fighter, scaled for rank relative to active fighters in the weight class.
@@ -30,8 +39,14 @@
                     One or both fighters lack data in the <strong>weight class</strong> required to populate a relative comparison
                 </div>                    
             </div>
+            </section>
+            <footer class="modal-card-foot">
+                <!-- <button class="button is-success">Save changes</button> -->
+                <button class="button" @click="close">Cancel</button>
+            </footer>
         </div>
     </div>
+  </transition>
 </template>
 
 <script>
@@ -76,6 +91,9 @@ export default {
             } else {
                 this.showBoutRadar = true
             }
+        },
+        close () {
+            this.$emit('closeRelEloModal')
         }
     },
     data () {
@@ -86,19 +104,42 @@ export default {
                     height: 350,
                     type: 'radar',
                 },
-                colors: ['#a0e3b7', '#d44446'],
+                colors: ['#5bc0de70', '#ee605b71'],
                 title: {
                     text: ''
                 },
                 xaxis: {
-                    categories: ['Striking Offense', 'Striking Defense', 'Grappling Offense', 'Grappling Defense', 'K/O Power', 'Chin', 'Submission', 'Evasiveness']
+                    categories: ['Striking Offense', 'Striking Defense', 'Grappling Offense', 'Grappling Defense', 'K/O Power', 'Chin', 'Submission', 'Evasiveness'],
+                    // labels: {
+                    //     style: {
+                    //         colors: '#fafafa'
+                    //     }
+                    // }
+                },
+                legend: {
+                    labels: {
+                        colors: '#fafafa'
+                    }
                 },
                 yaxis: {
                     min: 0,
                     max: 100
+                },
+                tooltip: {
+                    theme: 'dark'
                 }
             }   
         }
     }
 }
 </script>
+
+<style scoped>
+  .modal {
+    background: #FFFFFF;
+    box-shadow: 2px 2px 20px 1px;
+    overflow-x: auto;
+    display: flex;
+    flex-direction: column;
+  }
+</style>

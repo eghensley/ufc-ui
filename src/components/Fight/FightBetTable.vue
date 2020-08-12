@@ -1,12 +1,12 @@
 <template>
-    <div class="card events-card">
+    <div class="card events-card is-shadow-dreamy" v-if="fightSelected">
         <header class="card-header">
             <p class="card-header-title">
                 Algorithm's Bets
             </p>
-            <a class="card-header-icon" v-on:click="toggleBetTableVis()">
+            <a class="card-header-icon is-link" v-on:click="toggleBetTableVis()">
                 <span class="icon">
-                    <i aria-hidden="true" v-bind:class="{ 'fa fa-angle-up': showBetTable, 'fa fa-angle-down': !showBetTable }"></i>
+                    <i aria-hidden="true" v-bind:class="{ 'fas fa-chevron-circle-up': showBetTable, 'fas fa-chevron-circle-down': !showBetTable }"></i>
                 </span>
             </a>
         </header>
@@ -25,9 +25,9 @@
             </div>
         </div>
         <div class="card-content" v-if="showBetTable">
-            <table class="table is-bordered is-striped is-narrow is-fullwidth">
+            <table class="table is-bordered is-narrow is-fullwidth is-shadow-longer">
                 <thead>
-                    <tr>
+                    <tr class="is-shadow-sharp">
                         <th class="is-hidden-mobile" v-bind:class="{ 'is-hidden': !future }"><abbr title="Fighters competing">Bout</abbr></th>
                         <th><abbr title="Algorithm's money line bet">Pick</abbr></th>
                         <th class="is-hidden-mobile"><abbr title="Algorithm's probability of this fighter winning">Win Probability</abbr></th>
@@ -51,7 +51,7 @@
                     </tr>
                 </tfoot>
                 <tbody>
-                    <tr v-for="betBout in boutInfo" :key="betBout.oid">
+                    <tr class="is-shadow-dreamy" v-for="betBout in betData" :key="betBout.oid">
                     <template v-if="betBout.bet">
                         <td class="is-hidden-mobile" v-bind:class="{ 'is-hidden': !future }">{{betBout.boutName}}</td>
                         <td>{{betBout.predWinner}}</td>
@@ -70,6 +70,7 @@
 </template>
 
 <script>
+import ApiService from '@/services/ApiService.js'
 
 const formatter = new Intl.NumberFormat('en-US', {
    minimumFractionDigits: 2,      
@@ -79,25 +80,26 @@ const formatter = new Intl.NumberFormat('en-US', {
 export default {
     name: 'fightBetTable',
     props: {
-        boutInfo: {
-            type: Array, default: function () { 
-                return []
-            }
-        },
+        fightId: {type: String, default: ''},
         future: {type: Boolean, default: true},
-        totalResult: {type: Number, default: 0},
-        totalBet: {type: Number, default: 0},
+        fightSelected: {type: Boolean, default: false}
     },
-    // watch: { 
-    //     boutInfo: function(newVal, oldVal) { // watch it
-    //         console.log('Prop changed: ', newVal, ' | was: ', oldVal)
-    //         this.totalBet = 0
-    //         this.totalResult = 0
-    //     }
-    // },
+    watch: { 
+        fightId: function(newVal, oldVal) { // watch it
+            console.log('Prop changed: ', newVal, ' | was: ', oldVal)
+            this.totalBet = 0
+            this.totalResult = 0
+            if (this.fightId !== '') {
+                this.getBetsFromFightData()
+            }
+        }
+    },
     data () {
         return {
-            showBetTable: false
+            showBetTable: true,
+            betData: [],
+            totalBet: 0,
+            totalResult: 0
         }
     },
     methods: {
@@ -126,7 +128,37 @@ export default {
             } else {
                 this.showBetTable = true
             }
-        }
+        },
+        getBetsFromFightData () {
+            this.totalBet = 0
+            this.totalResult = 0
+            if (this.future) {
+                ApiService.getBetsFromFight(this.fightId)
+                    .then(
+                        bets => {
+                            this.betData = bets['response']
+                            var i;
+                            for (i = 0; i < this.betData.length; i++) {
+                                if (this.betData[i]['bet']) {
+                                    this.totalBet += this.betData[i]['wagerWeight']
+                                }
+                            }
+                        }
+                    ).catch(error => console.log(error))           
+            } else {
+                ApiService.getBetsFromPastFight(this.fightId)
+                    .then(
+                        bets => {
+                            this.betData = bets['response']
+                            var i;
+                            for (i = 0; i < this.betData.length; i++) {
+                                this.totalBet += this.betData[i]['wagerWeight']
+                                this.totalResult += this.betData[i]['betResult']
+                            }
+                        }
+                    ).catch(error => console.log(error))        
+            } 
+        },
     }
 }
 </script>

@@ -1,12 +1,12 @@
 <template>
-    <div class="card events-card">
+    <div class="card events-card is-shadow-dreamy">
         <header class="card-header">
             <p class="card-header-title">
                 Algorithm's Performance
             </p>
             <a class="card-header-icon" v-on:click="toggleHomeChartVis()">
                 <span class="icon">
-                    <i aria-hidden="true" v-bind:class="{ 'fa fa-angle-up': showHomeChart, 'fa fa-angle-down': !showHomeChart }"></i>
+                    <i aria-hidden="true" v-bind:class="{ 'fas fa-chevron-circle-up': showHomeChart, 'fas fa-chevron-circle-down': !showHomeChart }"></i>
                 </span>
             </a>
         </header>
@@ -19,6 +19,11 @@
 </template>
 
 <script>
+
+const rounder = new Intl.NumberFormat('en-US', {
+   minimumFractionDigits: 2,      
+   maximumFractionDigits: 2,
+})
 
 import VueApexCharts from 'vue-apexcharts'
 import ApiService from '@/services/ApiService.js'
@@ -41,15 +46,11 @@ export default {
                     var bank = 0
                     var i
                     for (i = 0; i < this.betData.length; i++) {
-                        console.log(this.betData[i].fightName)
-                        console.log(this.betData[i].result)
                         bank += this.betData[i].result
                         this.betSeries[0].data.push(bank)
                         this.betSeries[1].data.push(this.betData[i].result)
                         this.chartOptions.xaxis.categories.push(this.betData[i].fightName.split(':')[1])
                     }
-
-                    console.log(this.betSeries)
                     this.homeChartLoading = false
                 }
             )
@@ -72,46 +73,67 @@ export default {
             ],
             showHomeChart: true,
             chartOptions: {
-                // tooltip: {
-                //     shared: false,
-                //     x: {
-                //         formatter: function (val) {
-                //             return val
-                //         }
-                //     },
-                //     y: {
-                //         formatter: function (val) {
-                //             return '$'+val
-                //         }
-                //     }
-                // },
+                grid: {
+                    
+                },
+                theme: {
+                    palette: 'palette3', 
+                },
                 title: {
-                    text: 'Event and rolling total results'
+                    text: 'Event and rolling total results',
+                    style: {
+                        color: '#fafafa'
+                    }
+                },
+                legend: {
+                    labels: {
+                        colors: '#fafafa'
+                    }
                 },
                 xaxis: {
                     categories: [],
                     title: {
-                        text: 'Event'
+                        text: 'Event',
+                        style: {
+                            color: '#fafafa'
+                        }
                     },
                     labels: {
                         formatter: function (val) {
                             return val//.split(";")[1]
+                        },
+                        rotateAlways: true,
+                        style: {
+                            colors: '#aaa'
                         }
+                    },
+                    tooltip: {
+                        enabled: false
                     }
                 },
                 yaxis: {
                     title: {
-                        text: 'Balance'
+                        text: 'Balance',
+                        style: {
+                            color: '#fafafa'
+                        },
+                        offsetX: 10
                     },
                     labels: {
                         formatter: function (val) {
                             if (val < 0) {
-                                return '-$'+(val * -1)
+                                return '-$'+(rounder.format(val) * -1)
                             } else {
-                                return '$'+val
+                                return '$'+rounder.format(val)
                             }
+                        },
+                        style: {
+                            colors: '#aaa'
                         }
                     }
+                },
+                tooltip: {
+                    theme: 'dark'
                 }
             }         
         }

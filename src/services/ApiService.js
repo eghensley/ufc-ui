@@ -54,6 +54,14 @@ export default {
             console.log(error)
         })
     },
+    getBoutInfo (boutId) {
+        return axios.get( springServer + '/ufc/rest/bout/' + boutId + '/info', standardHeaders).then(response => {
+            return response.data
+        })
+        .catch(error => {
+            console.log(error)
+        })
+    },
     getBetsFromFight (fightId) {
         return axios.get( springServer + '/ufc/bet/table/fight/' + fightId, standardHeaders).then(response => {
             return response.data
@@ -201,6 +209,14 @@ export default {
     },
     getWeightClassRankings (weightClass) {
         return axios.get( flaskServer + '/ufc/api/v1.0/rankings/'+weightClass, standardHeaders).then(response => {
+            return response.data
+        })
+        .catch(error => {
+            console.log(error)
+        })
+    },
+    getTopWeightClassRankings () {
+        return axios.get( flaskServer + '/ufc/api/v1.0/rankings/top', standardHeaders).then(response => {
             return response.data
         })
         .catch(error => {
