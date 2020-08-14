@@ -3,11 +3,11 @@
         <header class="card-header is-bevel">
             <p class="card-header-title">
                 Algorithm's Bets
-                <progress class="progress is-medium is-dark" max="100" v-if="!isLoaded">45%</progress>
+                <!-- <progress class="progress is-medium is-dark" max="100" v-if="!isLoaded">45%</progress> -->
             </p>
             <a class="card-header-icon is-link" v-on:click="toggleBetTableVis()">
                 <span class="icon">
-                    <i aria-hidden="true" v-bind:class="{ 'fas fa-chevron-circle-up': isLoaded && showBetTable, 'fas fa-chevron-circle-down': !(isLoaded && showBetTable) }"></i>
+                    <i aria-hidden="true" v-bind:class="{ 'fas fa-cog fa-spin': !isLoaded, 'fas fa-chevron-circle-up': isLoaded && showBetTable, 'fas fa-chevron-circle-down': isLoaded && !showBetTable }"></i>
                 </span>
             </a>
         </header>
@@ -28,7 +28,7 @@
         <div class="card-content" v-if="showBetTable && isLoaded">
             <table class="table is-bordered is-narrow is-fullwidth is-shadow-longer">
                 <thead>
-                    <tr class="is-shadow-sharp">
+                    <tr class="is-shadow-sharp is-left">
                         <th class="is-hidden-mobile" v-bind:class="{ 'is-hidden': !future }"><abbr title="Fighters competing">Bout</abbr></th>
                         <th><abbr title="Algorithm's money line bet">Pick</abbr></th>
                         <th class="is-hidden-mobile"><abbr title="Algorithm's probability of this fighter winning">Win Probability</abbr></th>
@@ -40,7 +40,7 @@
                     </tr>
                 </thead>
                 <tfoot>
-                    <tr>
+                    <tr class="is-left">
                         <th class="is-hidden-mobile" v-bind:class="{ 'is-hidden': !future }"></th>
                         <th></th>
                         <th class="is-hidden-mobile"></th>

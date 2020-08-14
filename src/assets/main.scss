@@ -160,6 +160,9 @@ footer.card-footer {
 
 }
 
+tr.is-left {
+  text-align: left;
+}
 
 div.card.events-card.is-info-dark {
     background-color: darken($info, 40);

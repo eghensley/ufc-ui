@@ -5,13 +5,15 @@
             <p class="card-header-title">
                 <!-- <span> -->
                     Bout Information
-                    <progress class="progress is-medium is-dark" max="100" v-if="!isLoaded">45%</progress>
+                    <!-- <progress class="progress is-medium is-dark" max="100" v-if="!isLoaded">45%</progress> -->
                 <!-- </span> -->
             </p>
             <h1 v-if="!isLoaded"> {{evalIfLoaded()}} </h1>
             <a class="card-header-icon" v-on:click="toggleBoutStatsVis()">
                 <span class="icon">
-                    <i aria-hidden="true" v-bind:class="{ 'fas fa-chevron-circle-up': (showBoutStats && isLoaded), 'fas fa-chevron-circle-down': !(showBoutStats && isLoaded) }"></i>
+                    <i aria-hidden="true" v-bind:class="{ 'fas fa-cog fa-spin': !isLoaded, 'fas fa-chevron-circle-up': isLoaded && showBoutStats, 'fas fa-chevron-circle-down': isLoaded && !showBoutStats }"></i>
+
+                    <!-- <i aria-hidden="true" v-bind:class="{ 'fas fa-chevron-circle-up': (showBoutStats && isLoaded), 'fas fa-chevron-circle-down': !(showBoutStats && isLoaded) }"></i> -->
                 </span>
             </a>
         </header>

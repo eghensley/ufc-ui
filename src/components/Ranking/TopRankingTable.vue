@@ -15,7 +15,7 @@
             <div class="content">
                 <table class="table is-fullwidth is-shadow-longer">
                     <thead>
-                        <tr class="is-shadow-sharp">
+                        <tr class="is-shadow-sharp is-left">
                             <th></th>
                             <th>Weight Class</th>
                             <th>

@@ -3,12 +3,14 @@
         <header class="card-header is-bevel">
             <p class="card-header-title">
                 Bout Selection
-                <progress class="progress is-medium is-dark" max="100" v-if="!isLoaded">45%</progress>
+                <!-- <progress class="progress is-medium is-dark" max="100" v-if="!isLoaded">45%</progress> -->
             </p>
             <h1 v-if="!isLoaded"> {{evalIfLoaded()}} </h1>
             <a class="card-header-icon" v-on:click="toggleBoutDropdown()">
                 <span class="icon">
-                    <i aria-hidden="true" v-bind:class="{ 'fas fa-chevron-circle-up': isLoaded && boutDropDownVis, 'fas fa-chevron-circle-down': !(isLoaded && boutDropDownVis) }"></i>
+                    <i aria-hidden="true" v-bind:class="{ 'fas fa-cog fa-spin': !isLoaded, 'fas fa-chevron-circle-up': isLoaded && boutDropDownVis, 'fas fa-chevron-circle-down': isLoaded && !boutDropDownVis }"></i>
+
+                    <!-- <i aria-hidden="true" v-bind:class="{ 'fas fa-chevron-circle-up': isLoaded && boutDropDownVis, 'fas fa-chevron-circle-down': !(isLoaded && boutDropDownVis) }"></i> -->
                 </span>
             </a>
         </header>
@@ -17,7 +19,7 @@
                 <div class="content">
                     <table class="table is-fullwidth is-shadow-longer">
                         <thead>
-                            <tr class="is-shadow-sharp">
+                            <tr class="is-shadow-sharp is-left">
                                 <th></th>
                                 <th>Blue Corner</th>
                                 <th>Red Corner</th>

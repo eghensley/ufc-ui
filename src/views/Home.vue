@@ -42,8 +42,13 @@
                                     <h2 class="subtitle" v-if="!homeScreenLoading"> {{ selectedFightName }} </h2>
                                     <!-- <h2 class="subtitle" v-if="!homeScreenLoading"> {{ convToDate(selectedFightDate) }} </h2> -->
 
-                                    <h1 class="title" v-if="homeScreenLoading"> Loading ... </h1>
-                                    <progress class="progress is-medium is-dark" max="100" v-if="homeScreenLoading">45%</progress>
+                                    <h1 class="title" v-if="homeScreenLoading"> 
+                                        Loading ... 
+                                        <span class="icon">
+                                            <i class="fas fa-cog fa-spin" v-if="!homeScreenLoading"></i>
+                                        </span>
+                                    </h1>
+                                    <!-- <progress class="progress is-medium is-dark" max="100" v-if="homeScreenLoading">45%</progress> -->
 
                                     <!-- <a class="navbar-item is--brand" v-if="homeScreenLoading">
                                         <img class="navbar-brand-logo" src="@/assets/loading.gif" alt="Loading">
