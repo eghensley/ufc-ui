@@ -19,21 +19,21 @@
           <div id="navbarBasicExample" class="navbar-menu" v-bind:class="{ 'is-active': dropDownVis }">
             <div class="navbar-start">
 
-              <router-link class="navbar-item is-tab" to="/">
+              <router-link @click.native="goHome()" class="navbar-item is-tab" to="/" v-bind:class="{ 'is-active': homeVis }">
                 <span class="icon is-medium">
                   <i class="fa fa-home"></i>
                 </span>
                 Home
               </router-link>
 
-              <router-link class="navbar-item is-tab" to="/fights">
+              <router-link @click.native="goFight()" class="navbar-item is-tab" to="/fights" v-bind:class="{ 'is-active': fightVis }">
                 <span class="icon is-medium">
                   <i class="fa fa-bolt"></i>
                 </span>
                 Fights
               </router-link>
 
-              <router-link class="navbar-item is-tab" to="/rankings">
+              <router-link @click.native="goRank()" class="navbar-item is-tab" to="/rankings" v-bind:class="{ 'is-active': rankVis }">
                 <span class="icon is-medium">
                   <i class="fa fa-balance-scale"></i>
                 </span>
@@ -87,7 +87,10 @@ export default {
   data () {
     return {
       dropDownVis: false,
-      moreDropDownVis: false
+      moreDropDownVis: false,
+      homeVis: true,
+      fightVis: false,
+      rankVis: false
     }
   },
   methods: {
@@ -104,6 +107,30 @@ export default {
       } else {
         this.moreDropDownVis = true
       }
+    },
+    goHome () {
+      if (!this.homeVis) {
+        this.dropDownVis = false
+      }
+      this.homeVis = true
+      this.fightVis = false
+      this.rankVis = false
+    },
+    goRank () {
+      if (!this.rankVis) {
+        this.dropDownVis = false
+      }
+      this.rankVis = true
+      this.homeVis = false
+      this.fightVis = false
+    },
+    goFight () {
+      if (!this.fightVis) {
+        this.dropDownVis = false
+      }
+      this.fightVis = true
+      this.homeVis = false
+      this.rankVis = false
     }
   }
 }
