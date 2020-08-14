@@ -1,154 +1,149 @@
 <template>
     <div class="card events-card is-shadow-dreamy">
 
-        <header class="card-header">
+        <header class="card-header is-bevel">
             <p class="card-header-title">
-                <!-- <span class="icon is-small is-hidden-mobile" v-if="selectedBoutInfo.champBout">
-                    <i class="fas fa-crown"></i>
-                </span> -->
-                <span>
+                <!-- <span> -->
                     Bout Information
-                </span>
+                    <progress class="progress is-medium is-dark" max="100" v-if="!isLoaded">45%</progress>
+                <!-- </span> -->
             </p>
+            <h1 v-if="!isLoaded"> {{evalIfLoaded()}} </h1>
             <a class="card-header-icon" v-on:click="toggleBoutStatsVis()">
                 <span class="icon">
-                    <i aria-hidden="true" v-bind:class="{ 'fas fa-chevron-circle-up': showBoutStats, 'fas fa-chevron-circle-down': !showBoutStats }"></i>
+                    <i aria-hidden="true" v-bind:class="{ 'fas fa-chevron-circle-up': (showBoutStats && isLoaded), 'fas fa-chevron-circle-down': !(showBoutStats && isLoaded) }"></i>
                 </span>
             </a>
         </header>
-        <div class="card-content" v-if="showBoutStats">
+        <div class="card-content" v-if="showBoutStats && isLoaded">
             <div class="content">
-                <!-- <section class="container"> -->
-                    <div class="columns">
-                        <div class="column">
-                            <p class="notification is-info-light is-shadow-dreamy" v-if="!isFuture">
-                                <strong>{{selectedBoutInfo.finishDetails}}</strong>
-                            </p>
-                            <div class="columns is-mobile">
-                                <div class="column">
-                                    <p class="notification is-info-light is-shadow-dreamy"> 
-                                        Rounds: <strong>{{ selectedBoutInfo['schedRounds'] }} </strong> <strong v-if="!isFuture"> ({{ selectedBoutDetails['finishRounds'] }} - {{resolveFinishTime()}})</strong>
-                                    </p>
-                                </div>
-                                <div class="column">
-                                    <p class="notification is-info-light is-shadow-dreamy">Weight Class: <strong>{{ resolveWeightClass(selectedBoutInfo['weightClass']) }} </strong></p>
-                                </div>
+                <div class="columns">
+                    <div class="column">
+                        <p class="notification is-shadow-dreamy" v-if="!isFuture">
+                            <strong>{{selectedBoutInfo.finishDetails}}</strong>
+                        </p>
+                        <p class="notification is-shadow-dreamy is-hidden-tablet is-hidden-widescreen">
+                            Rounds: <strong>{{ selectedBoutInfo['schedRounds'] }} </strong> <strong v-if="!isFuture"> ({{ selectedBoutDetails['finishRounds'] }} - {{resolveFinishTime()}})</strong>
+                            <br>
+                            Weight Class: <strong>{{ resolveWeightClass(selectedBoutInfo['weightClass']) }} </strong>
+                        </p>
+                        <p class="notification is-shadow-dreamy is-hidden-tablet is-hidden-widescreen" v-if="!isFuture && boutDetailsReady">
+                            Betting Note: <strong>{{selectedBoutDetails.betInfo.notes}}</strong>
+                            <br>
+                            Referee: <strong>{{selectedBoutDetails.referee}}</strong>
+                            <br>
+                            Finish Method: <strong>{{ resolveFinishMethodDict(selectedBoutDetails['finishMethod']) }} </strong>
+                        </p>
+                        <div class="columns is-hidden-mobile">
+                            <div class="column">
+                                <p class="notification is-shadow-dreamy"> 
+                                    Rounds: <strong>{{ selectedBoutInfo['schedRounds'] }} </strong> <strong v-if="!isFuture"> ({{ selectedBoutDetails['finishRounds'] }} - {{resolveFinishTime()}})</strong>
+                                </p>
+                            </div>
+                            <div class="column">
+                                <p class="notification is-shadow-dreamy">
+                                    Weight Class: <strong>{{ resolveWeightClass(selectedBoutInfo['weightClass']) }} </strong>
+                                </p>
                             </div>
                         </div>
                     </div>
-                    <div class="columns" v-if="!isFuture && boutDetailsReady">
-                        <div class="column">
-                            <p class="notification is-info-light is-shadow-dreamy" v-if="selectedBoutDetails.notes">
-                                Betting Note: <strong>{{selectedBoutDetails.betInfo.notes}}</strong>
-                            </p>
-                            <div class="columns is-mobile">
-                                <div class="column">
-                                    <p class="notification is-info-light is-shadow-dreamy"> Referee: <strong>{{selectedBoutDetails.referee}}</strong></p>
-                                </div>
-                                <div class="column">
-                                    <p class="notification is-info-light is-shadow-dreamy">Finish Method: <strong>{{ resolveFinishMethodDict(selectedBoutDetails['finishMethod']) }} </strong></p>
-                                </div>
+                </div>
+                <div class="columns" v-if="!isFuture && boutDetailsReady">
+                    <div class="column is-hidden-mobile">
+                        <p class="notification is-shadow-dreamy" v-if="hasNotes">
+                            Betting Note: <strong>{{selectedBoutDetails.betInfo.notes}}</strong>
+                        </p>
+                        <div class="columns">
+                            <div class="column">
+                                <p class="notification is-shadow-dreamy">
+                                    Referee: <strong>{{selectedBoutDetails.referee}}</strong>
+                                </p>
+                            </div>
+                            <div class="column">
+                                <p class="notification is-shadow-dreamy">Finish Method: <strong>{{ resolveFinishMethodDict(selectedBoutDetails['finishMethod']) }} </strong></p>
                             </div>
                         </div>
                     </div>
-                    <div class="columns">
-                        <div class="column">
-                            <p class="notification is-info is-shadow-dreamy">
-                                <strong>{{selectedBoutInfo['fighterBoutXRefs'][0]['fighter']['fighterName']}}</strong>
-                                <span class="icon is-right">
-                                    <i class="fas fa-check" v-if="!isFuture && evalIfWon(selectedBoutInfo['fighterBoutXRefs'][0])"></i>
-                                    <i class="fas fa-times" v-if="!isFuture && !evalIfWon(selectedBoutInfo['fighterBoutXRefs'][0])"></i>
-                                </span>
-                            </p>
-                            <div class="columns is-mobile">
-                                <div class="column">
-                                    <p class="notification is-info-light is-shadow-dreamy"> Vegas Odds: <strong>{{convImpProbToAmerOdds(selectedBoutInfo['fighterBoutXRefs'][0].mlOdds)}} </strong></p>
-                                </div>
-                                <div class="column">
-                                    <p class="notification is-info-light is-shadow-dreamy"> Win Probability: <strong> {{formatWinProb(selectedBoutInfo['fighterBoutXRefs'][0].expOdds)}}</strong></p>
-                                </div>
+                </div>
+                <div class="columns">
+                    <div class="column">
+                        <p class="notification is-info is-shadow-sharp">
+                            <strong>{{selectedBoutInfo['fighterBoutXRefs'][0]['fighter']['fighterName']}}</strong>
+                            <span class="icon is-right" v-if="!isFuture">
+                                <!-- <i class="fas fa-dollar-sign" v-if="!isFuture && evalIfBet(selectedBoutInfo['fighterBoutXRefs'][0]['fighter']['fighterName'])"></i> -->
+                                <i class="fas fa-check" v-if="evalIfWon(selectedBoutInfo['fighterBoutXRefs'][0])"></i>
+                                <i class="fas fa-times" v-if="!evalIfWon(selectedBoutInfo['fighterBoutXRefs'][0])"></i>
+                            </span>
+                            <span class="icon is-right" v-if="!isFuture && evalIfBet(selectedBoutInfo['fighterBoutXRefs'][0]['fighter']['fighterName'])">
+                                <i class="fas fa-dollar-sign"></i>
+                            </span>
+                        </p>
+                        <div class="columns">
+                            <div class="column is-hidden-mobile">
+                                <p class="notification is-info-dark is-shadow-dreamy"> Vegas Odds: <strong>{{convImpProbToAmerOdds(selectedBoutInfo['fighterBoutXRefs'][0].mlOdds)}} </strong></p>
                             </div>
-                            <FightBoutRoundPerformance
-                                v-if="!isFuture && boutDetailsReady"
-                                :selectedFighterDetails="selectedBoutDetails['fighterBoutXRefs'][0]"
-                                :isFuture="isFuture"
-                            />
-                        </div>
-                        <div class="column">
-                            <p class="notification is-danger is-shadow-dreamy">
-                                <strong>{{selectedBoutInfo['fighterBoutXRefs'][1]['fighter']['fighterName']}}</strong>
-                                <span class="icon is-right">
-                                    <i class="fas fa-check" v-if="!isFuture && evalIfWon(selectedBoutInfo['fighterBoutXRefs'][1])"></i>
-                                    <i class="fas fa-times" v-if="!isFuture && !evalIfWon(selectedBoutInfo['fighterBoutXRefs'][1])"></i>
-                                </span>
-                            </p>
-                            <div class="columns is-mobile">
-                                <div class="column">
-                                    <p class="notification is-danger-light is-shadow-dreamy"> Vegas Odds: <strong>{{convImpProbToAmerOdds(selectedBoutInfo['fighterBoutXRefs'][1].mlOdds)}} </strong></p>
-                                </div>
-                                <div class="column">
-                                    <p class="notification is-info-light is-shadow-dreamy"> Win Probability: <strong> {{formatWinProb(selectedBoutInfo['fighterBoutXRefs'][1].expOdds)}}</strong></p>
-                                </div>
+                            <div class="column is-hidden-mobile">
+                                <p class="notification is-info-dark is-shadow-dreamy"> Win Probability: <strong> {{formatWinProb(selectedBoutInfo['fighterBoutXRefs'][0].expOdds)}}</strong></p>
                             </div>
-                            <FightBoutRoundPerformance
-                                v-if="!isFuture && boutDetailsReady"
-                                :selectedFighterDetails="selectedBoutDetails['fighterBoutXRefs'][1]"
-                                :isFuture="isFuture"
-                            />
+
+                            <div class="column is-hidden-tablet is-hidden-widescreen">
+                                <p class="notification is-info-dark is-shadow-dreamy"> 
+                                    Vegas Odds: <strong>{{convImpProbToAmerOdds(selectedBoutInfo['fighterBoutXRefs'][0].mlOdds)}} </strong>
+                                    <br>
+                                    Win Probability: <strong> {{formatWinProb(selectedBoutInfo['fighterBoutXRefs'][0].expOdds)}}</strong>
+                                </p>
+                            </div>
+
                         </div>
+                        <FightBoutRoundPerformance
+                            v-if="!isFuture && boutDetailsReady"
+                            :selectedFighterDetails="selectedBoutDetails['fighterBoutXRefs'][0]"
+                            :isFuture="isFuture"
+                            :blueCorner="true"
+                        />
                     </div>
-                    <!-- <div class="columns is-mobile">
-                        <div class="column is-one-third">
-                            <div class="notification is-primary is-shadow-sharp is-inverted">
-                                Statistics Comparisons
-                                    <button class="button is-info"></button>
-                                
+                    <div class="column">
+                        <p class="notification is-danger is-shadow-sharp">
+                            <strong>{{selectedBoutInfo['fighterBoutXRefs'][1]['fighter']['fighterName']}}</strong>
+                            <span class="icon is-right" v-if="!isFuture">
+                                <i class="fas fa-check" v-if="evalIfWon(selectedBoutInfo['fighterBoutXRefs'][1])"></i>
+                                <i class="fas fa-times" v-if="!evalIfWon(selectedBoutInfo['fighterBoutXRefs'][1])"></i>
+                            </span>
+                            <span class="icon is-right" v-if="!isFuture && evalIfBet(selectedBoutInfo['fighterBoutXRefs'][1]['fighter']['fighterName'])">
+                                <i class="fas fa-dollar-sign"></i>
+                            </span>
+                        </p>
+                        <div class="columns">
+                            <div class="column is-hidden-mobile">
+                                <p class="notification is-danger-dark is-shadow-dreamy"> Vegas Odds: <strong>{{convImpProbToAmerOdds(selectedBoutInfo['fighterBoutXRefs'][1].mlOdds)}} </strong></p>
+                            </div>
+                            <div class="column is-hidden-mobile">
+                                <p class="notification is-danger-dark is-shadow-dreamy"> Win Probability: <strong> {{formatWinProb(selectedBoutInfo['fighterBoutXRefs'][1].expOdds)}}</strong></p>
+                            </div>
+                            <div class="column is-hidden-tablet is-hidden-widescreen">
+                                <p class="notification is-danger-dark is-shadow-dreamy"> 
+                                    Vegas Odds: <strong>{{convImpProbToAmerOdds(selectedBoutInfo['fighterBoutXRefs'][1].mlOdds)}} </strong>
+                                    <br>
+                                    Win Probability: <strong> {{formatWinProb(selectedBoutInfo['fighterBoutXRefs'][1].expOdds)}}</strong>
+                                </p>
                             </div>
                         </div>
-                    </div> -->
-                <!-- </section> -->
-            <!-- <table class="table is-bordered is-striped is-narrow is-fullwidth">
-                <thead>
-                    <tr>
-                        <th>
-                            <abbr title="Fighter">Fighter</abbr>
-                        </th>
-                        <th>
-                            <abbr title="Average money line odds across multiple sportsbooks">Vegas Odds</abbr>
-                        </th>                              
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="betBout in selectedBoutInfo['fighterBoutXRefs']" :key="betBout.oid">
-                        <td>
-                            <i class="fas fa-check" v-if='!isFuture & evalIfWon(betBout)'></i>
-                            {{betBout['fighter']['fighterName']}}</td>
-                        <td>{{convImpProbToAmerOdds(betBout.mlOdds)}}</td>
-                    </tr>
-                </tbody>
-            </table>
-                <p v-if="!isFuture"> {{selectedBoutInfo['finishDetails']}} </p>
-                <div class="level">
-                    <div class="level-item">
-                        <div>
-                            <div class="heading has-text-centered"> Scheduled Rounds </div>
-                            <div class="title is-5 has-text-centered"> {{ selectedBoutInfo['schedRounds'] }} </div>
-                        </div>
+                        <FightBoutRoundPerformance
+                            v-if="!isFuture && boutDetailsReady"
+                            :selectedFighterDetails="selectedBoutDetails['fighterBoutXRefs'][1]"
+                            :isFuture="isFuture"
+                            :blueCorner="false"
+                        />
                     </div>
-                    <div class="level-item">
-                        <div>
-                            <div class="heading has-text-centered"> Weight Class </div>
-                            <div class="title is-5 has-text-centered"> {{ resolveWeightClass(selectedBoutInfo['weightClass']) }} </div>
-                        </div>
-                    </div>
-                </div>      -->
-                
+                </div>             
             </div>
         </div>
-        <footer class="card-footer">
-            <a :disabled="!directEloBarReady" @click="openDirectBarEloModal()" class="button card-footer-item is-primary">Direct ELO Comparison</a>
-            <a :disabled="!relEloRadarReady" @click="openRelRadarEloModal()" class="button is-primary card-footer-item">Relative ELO Comparison</a>
-            <a :disabled="!changeEloBarReady" @click="openChangeBarEloModal()" class="button is-primary card-footer-item">ELO Change After Fight</a>
+        <footer class="card-footer" v-if="showBoutStats && isLoaded">
+            <div class="buttons is-fullwidth">
+                <a :disabled="!directEloBarReady" @click="openDirectBarEloModal()" class="button card-footer-item is-primary is-fullwidth">Direct ELO Comparison</a>
+                <a :disabled="!relEloRadarReady" @click="openRelRadarEloModal()" class="button is-primary card-footer-item is-fullwidth">Relative ELO Comparison</a>
+                <a :disabled="!changeEloBarReady" @click="openChangeBarEloModal()" class="button is-primary card-footer-item is-fullwidth">ELO Change After Fight</a>
+            </div>
         </footer>
     </div>
 </template>
@@ -204,13 +199,37 @@ export default {
         changeEloBarReady: {type: Boolean, default: false},
     },
     watch: {
+        selectedBoutInfo(newInfo) {
+            if (!this.isFuture) {
+                this.boutDetailsReady = false
+                this.isLoaded = false
+            }
+            if ('oid' in newInfo) {
+                this.boutInfoReady = true
+            } else {
+                this.boutInfoReady = false
+            }
+        },
         selectedBoutDetails(newDetails) {
             if ('oid' in newDetails) {
                 this.boutDetailsReady = true
+                if (newDetails.betInfo.notes !== null) {
+                    this.hasNotes = true
+                }
+            } else {
+                this.boutDetailsReady = false
             }
         }
     },
     methods: {
+        evalIfLoaded () {
+            if (!this.boutInfoReady && 'oid' in this.selectedBoutInfo) {
+                this.boutInfoReady = true
+            }
+            if (this.boutInfoReady && (this.isFuture || (!this.isFuture && this.boutDetailsReady))) {
+                this.isLoaded = true
+            }
+        },
         openDirectBarEloModal () {
             this.$emit('displayDirectEloBarModal')
         },
@@ -234,17 +253,16 @@ export default {
             if (finishSecsFinalStr.length === 1){
                 finishSecsFinalStr = '0'+finishSecsFinalStr
             }
-            var finishMinsFinalStr = finishMins.toString()
-            // if (finishMinsFinalStr.length === 1){
-            //     finishMinsFinalStr = '0'+finishMinsFinalStr
-            // }            
+            var finishMinsFinalStr = finishMins.toString()    
             return finishMinsFinalStr + ':' + finishSecsFinalStr
         },
         toggleBoutStatsVis () {
-            if (this.showBoutStats){
-                this.showBoutStats = false
-            } else {
-                this.showBoutStats = true
+            if (this.isLoaded) {
+                if (this.showBoutStats){
+                    this.showBoutStats = false
+                } else {
+                    this.showBoutStats = true
+                }
             }
         },
         convImpProbToAmerOdds (impProb) {
@@ -260,7 +278,11 @@ export default {
             return formatter.format(inDouble)
         },
         formatWinProb (prob) {
-            return this.round(prob*100)+'%'
+            if (prob === null) {
+                return 'N/A'
+            } else {
+                return this.round(prob*100)+'%'
+            }
         },
         evalIfWon(bout){
             if (bout.outcome === 'W') {
@@ -269,14 +291,21 @@ export default {
                 false
             }
         },
-        // hasNotes () {
-        //     if (this.boutDetailsReady && 'notes')
-        // }
+        evalIfBet (fighterName) {
+            if (this.selectedBoutDetails.betInfo.bet && fighterName === this.selectedBoutDetails.betInfo.predWinner) {
+                return true
+            } else {
+                return false
+            }
+        }
     },
     data () {
         return {
             showBoutStats: true,
-            boutDetailsReady: false
+            boutDetailsReady: false,
+            boutInfoReady: false,
+            isLoaded: false,
+            hasNotes: false
         }
     }
 }

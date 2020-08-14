@@ -1,12 +1,17 @@
 <template>
     <div class="card events-card is-shadow-longer">
         <h1 v-if="rankingTableLoading && !rankingTableInitialized"> {{initRankPage()}} </h1>
-        <header class="card-header">
+        <header class="card-header is-bevel">
             <p class="card-header-title">
                 Fighters
             </p>
+            <a class="card-header-icon is-link" v-on:click="toggleWCRankTableVis()">
+                <span class="icon">
+                    <i aria-hidden="true" v-bind:class="{ 'fas fa-chevron-circle-up': showWCRankTable, 'fas fa-chevron-circle-down': !showWCRankTable }"></i>
+                </span>
+            </a>
         </header>
-        <div class="card-table">
+        <div class="card-table" v-if="showWCRankTable">
             <div class="content">
                 <table class="table is-fullwidth is-shadow-longer">
                     <thead>
@@ -23,8 +28,8 @@
                             </th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr class="is-shadow-dreamy" v-for="rank in weightClassRankings" :key="rank.oid">
+                    <tbody class="is-shadow-inverted">
+                        <tr  v-for="rank in weightClassRankings" :key="rank.oid">
                             <td width="5%">
                                 <i class="fa fa-bell-o"></i>
                             </td>
@@ -89,13 +94,21 @@ export default {
             isFighterModalVisible: false,
             selectedFighterRank: {},
             isRankInfoModalVisible: false,
-            selectedModelFighterRankSeries: [{name: 'test', data: []}]
+            selectedModelFighterRankSeries: [{name: 'test', data: []}],
+            showWCRankTable: true
         }
     },
     methods: {
         initRankPage () {
             this.rankingTableInitialized = true
             this.getRankings()
+        },
+        toggleWCRankTableVis () {
+            if (this.showWCRankTable) {
+                this.showWCRankTable = false
+            } else {
+                this.showWCRankTable = true
+            }
         },
         getRankings () {
             this.rankingTableLoading = true

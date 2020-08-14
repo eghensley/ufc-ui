@@ -9,7 +9,7 @@
             </header>
             <section class="modal-card-body">
                 <div class="content">
-                    <h2> {{ modalFighterRank['name'] }} </h2>
+                    <h2 class="is-primary"> {{ modalFighterRank['name'] }} </h2>
                 </div>
                 
                 <VueApexCharts type="radar" height="450" :options="chartOptions" :series="modelFighterRankSeries"></VueApexCharts>
@@ -25,6 +25,12 @@
 </template>
 
 <script>
+
+const rounder = new Intl.NumberFormat('en-US', {
+   minimumFractionDigits: 2,      
+   maximumFractionDigits: 2,
+})
+
 
 import VueApexCharts from 'vue-apexcharts'
 
@@ -64,13 +70,75 @@ export default {
                 chart: {
                     height: 350,
                     type: 'radar',
+                    // background: '#5bc0de70'
+                },
+                // fill: {
+                //     colors: '#5bc0de70'
+                // },
+                plotOptions: {
+                    radar: {
+                        polygons: {
+                            strokeColor: '#e8e8e8',
+                            fill: {
+                                colors: ['#1f2328bd', '#1f2328de', '#1f2328']
+                            }
+                        }
+                    },
                 },
                 title: {
-                    text: 'Elo Rank Breakdown'
+                    text: 'Elo Rank Breakdown',
+                    style: {
+                        color: '#fafafa'
+                    }
                 },
                 xaxis: {
-                    categories: ['Striking Offense', 'Striking Defense', 'Grappling Offense', 'Grappling Defense', 'K/O Power', 'Chin', 'Submission', 'Evasiveness']
-                }
+                    categories: ['Striking Offense', 'Striking Defense', 'Grappling Offense', 'Grappling Defense', 'K/O Power', 'Chin', 'Submission', 'Evasiveness'],
+                    labels: {
+                        show: true
+                    }
+// style: {
+                    //     colors: '#fafafa'
+                    // }
+                },
+                colors: ['#5bc0de70'],
+                yaxis: {
+                    min: 0,
+                    max: 100,
+                    labels: {
+                        // show: false,
+                        // style: {
+                        //     colors: '#fafafa'
+                        // }
+                    formatter: () => { return '' },
+                    },
+                    axisTicks: {
+                        show: false
+                    }
+
+                },
+                tooltip: {
+                    theme: 'dark',
+                    x: {
+                        formatter: function (val) {
+                            return val
+                        }
+                    },
+                    y: {
+                        formatter: function (val) {
+                            return rounder.format(Math.abs(val)) + '%'
+                        }
+                    }
+                },
+                // stroke: {
+                //     show: false
+                // },
+                // dataLabels: {
+                //     enabled: true,
+                //     background: {
+                //         enabled: true,
+                //         borderRadius:2,
+                //     }
+                // }
             }
         }
     },
@@ -84,7 +152,7 @@ export default {
 
 <style scoped>
   .modal {
-    background: #FFFFFF;
+    background: #5bc0de70;
     box-shadow: 2px 2px 20px 1px;
     overflow-x: auto;
     display: flex;

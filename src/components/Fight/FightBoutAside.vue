@@ -1,5 +1,5 @@
 <template>
-    <aside class="column is-one-fifth aside is-hidden-mobile">
+    
         <nav class="menu">
             <p class="menu-label"> Fights </p>
             <ul class="menu-list" v-for="fight in pastFightMetaList" :key="fight.oid">
@@ -7,10 +7,11 @@
                     <a v-bind:class="{ 'is-active': isFightActive(fight) }" v-on:click="switchFightAside(fight['fightId'])">
                         {{fight['fightName']}}
                         <span class="icon" v-if="isFightActive(fight)" v-on:click="toggleBoutAsideVis()">
-                            <i aria-hidden="true" v-bind:class="{ 'fa fa-angle-up': showBouts, 'fa fa-angle-down': !showBouts }"></i>
+                            <i aria-hidden="true" v-if="isLoaded" v-bind:class="{ 'fa fa-angle-up': showBouts, 'fa fa-angle-down': !(showBouts) }"></i>
+                            <i class="fas fa-cog fa-spin" v-if="!isLoaded"></i>
                         </span>
                     </a>
-                    <template v-if="isFightActive(fight) && showBouts">
+                    <template v-if="isFightActive(fight) && showBouts && isLoaded">
                         <ul v-for="bout in boutList" :key="bout.oid">
                             <li>
                                 <a v-on:click="switchBout(bout)" v-bind:class="{ 'is-active': evalIfBoutSelected(bout)}">
@@ -25,7 +26,7 @@
                 </li>
             </ul>
         </nav>        
-    </aside>
+    <!-- </aside> -->
 </template>
 
 <script>
@@ -51,12 +52,22 @@ export default {
         pastFightMetaList: {type: Array, default: function () { return []}},
         curFightId: {type: String, default: null}
     },
+    watch: {
+        boutList(bouts) {
+            if (bouts.length === 0) {
+                this.isLoaded = false
+            } else {
+                this.isLoaded = true
+            }
+        }
+    },
     data () {
         return {
             selectedFighter: {},
             isFighterModalVisible: false,
             boutDropDownVis: false,
-            showBouts: true
+            showBouts: true,
+            isLoaded: false
         }
     },
     methods: {
@@ -111,10 +122,12 @@ export default {
             }
         },
         toggleBoutAsideVis () {
-            if (this.showBouts) {
-                this.showBouts = false
-            } else {
-                this.showBouts = true
+            if (this.isLoaded) {
+                if (this.showBouts) {
+                    this.showBouts = false
+                } else {
+                    this.showBouts = true
+                }
             }
         }
     }

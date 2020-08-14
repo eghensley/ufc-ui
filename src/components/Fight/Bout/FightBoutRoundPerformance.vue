@@ -1,6 +1,6 @@
 <template>
-    <div class="card events-card is-shadow-sharp">
-        <header class="card-header">
+    <div class="card events-card is-shadow-sharp" v-bind:class="{ 'is-info-dark': blueCorner, 'is-danger-dark': !blueCorner }">
+        <header class="card-header is-bevel">
             <p class="card-header-title">
                 <span>
                     Round Performance
@@ -16,16 +16,19 @@
             <div class="content">
                 <table class="table is-fullwidth">
                     <thead>
-                        <tr class='is-shadow-sharp'>
-                            <th></th>
-                            <th>Round</th>
-                            <th>KO Score</th>
-                            <th>Sub Score</th>
+                        <tr class='is-shadow-sharp' v-bind:class="{ 'is-info-dark': blueCorner, 'is-danger-dark': !blueCorner }">
+                            <th class="is-hidden-mobile"></th>
+                            <th class="is-hidden-mobile">Round</th>
+                            <th class="is-hidden-tablet is-hidden-widescreen">Rnd</th>
+                            <th class="is-hidden-mobile">KO Score</th>
+                            <th class="is-hidden-mobile">Sub Score</th>
+                            <th class="is-hidden-tablet is-hidden-widescreen">KO</th>
+                            <th class="is-hidden-tablet is-hidden-widescreen">Sub</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="roundDetail in selectedFighterDetails.boutDetails" :key="roundDetail.oid">
-                            <td width="5%">
+                        <tr v-for="roundDetail in selectedFighterDetails.boutDetails" :key="roundDetail.oid" v-bind:class="{ 'is-info-dark': blueCorner, 'is-danger-dark': !blueCorner }">
+                            <td width="5%" class="is-hidden-mobile">
                             </td>
                             <td>
                                 {{roundDetail.round}}
@@ -55,7 +58,8 @@ export default {
     name: 'fightBoutRoundPerformance',
     props: {
         selectedFighterDetails: {type: Object},
-        isFuture: {type: Boolean, default: true}
+        isFuture: {type: Boolean, default: true},
+        blueCorner: {type: Boolean, default: false},
     },
     watch: {
         selectedFighterDetails() {

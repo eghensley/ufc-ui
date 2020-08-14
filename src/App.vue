@@ -5,8 +5,8 @@
         <nav class="navbar has-shadow" role="navigation" aria-label="main navigation">
           <div class="navbar-brand">
             <div class="navbar-item">
-              <figure class="image is-32x32">
-                <img class="is-rounded" src="@/assets/app-logo.png" alt="Bulma Admin Template logo">
+              <figure class="image is-48x48">
+                <img src="@/assets/app-logo.png">
               </figure>
             </div>
 

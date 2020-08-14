@@ -1,6 +1,6 @@
 <template>
-    <div class="card events-card is-shadow-dreamy">
-        <header class="card-header">
+    <div class="card events-card is-shadow-longer">
+        <header class="card-header is-bevel">
             <p class="card-header-title">
                 Algorithm's Performance
             </p>
@@ -12,6 +12,7 @@
         </header>
         <div class="card-content" v-if="showHomeChart">
             <div class="content">
+                Event and rolling total results
                 <apexchart v-if="!homeChartLoading" type="line" height="440" :options="chartOptions" :series="betSeries"></apexchart>
             </div>
         </div>
@@ -80,7 +81,7 @@ export default {
                     palette: 'palette3', 
                 },
                 title: {
-                    text: 'Event and rolling total results',
+                    text: '',
                     style: {
                         color: '#fafafa'
                     }

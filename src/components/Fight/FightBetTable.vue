@@ -1,16 +1,17 @@
 <template>
     <div class="card events-card is-shadow-dreamy" v-if="fightSelected">
-        <header class="card-header">
+        <header class="card-header is-bevel">
             <p class="card-header-title">
                 Algorithm's Bets
+                <progress class="progress is-medium is-dark" max="100" v-if="!isLoaded">45%</progress>
             </p>
             <a class="card-header-icon is-link" v-on:click="toggleBetTableVis()">
                 <span class="icon">
-                    <i aria-hidden="true" v-bind:class="{ 'fas fa-chevron-circle-up': showBetTable, 'fas fa-chevron-circle-down': !showBetTable }"></i>
+                    <i aria-hidden="true" v-bind:class="{ 'fas fa-chevron-circle-up': isLoaded && showBetTable, 'fas fa-chevron-circle-down': !(isLoaded && showBetTable) }"></i>
                 </span>
             </a>
         </header>
-        <div class="card-content" v-if="showBetTable">
+        <div class="card-content" v-if="showBetTable && isLoaded">
             <div class="content" v-if="future">
                 <div class="subtitle">
                     The model has found an edge in the following bets, based on the <strong> currently displayed Vegas odds</strong>.
@@ -24,14 +25,14 @@
                     Click <a href="#/about">here</a> for additional information on the model, methodology, and approach.
             </div>
         </div>
-        <div class="card-content" v-if="showBetTable">
+        <div class="card-content" v-if="showBetTable && isLoaded">
             <table class="table is-bordered is-narrow is-fullwidth is-shadow-longer">
                 <thead>
                     <tr class="is-shadow-sharp">
                         <th class="is-hidden-mobile" v-bind:class="{ 'is-hidden': !future }"><abbr title="Fighters competing">Bout</abbr></th>
                         <th><abbr title="Algorithm's money line bet">Pick</abbr></th>
                         <th class="is-hidden-mobile"><abbr title="Algorithm's probability of this fighter winning">Win Probability</abbr></th>
-                        <th><abbr title="Average money line odds across multiple sportsbooks">Vegas Odds</abbr></th>                              
+                        <th class="is-hidden-mobile"><abbr title="Average money line odds across multiple sportsbooks">Vegas Odds</abbr></th>                              
                         <th class="is-hidden-mobile"><abbr title="Implied probability from Vegas money line odds of this fighter winning">Vegas Probability</abbr></th>
                         <th class="is-hidden-mobile"><abbr title="Algorithm's probability - Vegas implied probability (positive = advantage)">Edge</abbr></th>
                         <th><abbr title="Amount that the algorithm is betting for this bout">Bet Amount</abbr></th>
@@ -43,20 +44,20 @@
                         <th class="is-hidden-mobile" v-bind:class="{ 'is-hidden': !future }"></th>
                         <th></th>
                         <th class="is-hidden-mobile"></th>
-                        <th></th>                              
+                        <th class="is-hidden-mobile"></th>                              
                         <th class="is-hidden-mobile"></th>
                         <th class="is-hidden-mobile"></th>
-                        <th><abbr title="Total amount that the algorithm is betting for this fight">{{convToDollarStr(round(totalBet))}}</abbr></th>
-                        <th v-bind:class="{ 'is-hidden': future }"><abbr title="Total Results from bets">{{convToDollarStr(round(totalResult))}}</abbr></th>
+                        <th class="is-shadow-inverted"><abbr title="Total amount that the algorithm is betting for this fight">{{convToDollarStr(round(totalBet))}}</abbr></th>
+                        <th class="is-shadow-inverted" v-bind:class="{ 'is-hidden': future }"><abbr title="Total Results from bets">{{convToDollarStr(round(totalResult))}}</abbr></th>
                     </tr>
                 </tfoot>
                 <tbody>
-                    <tr class="is-shadow-dreamy" v-for="betBout in betData" :key="betBout.oid">
+                    <tr v-for="betBout in betData" :key="betBout.oid">
                     <template v-if="betBout.bet">
                         <td class="is-hidden-mobile" v-bind:class="{ 'is-hidden': !future }">{{betBout.boutName}}</td>
                         <td>{{betBout.predWinner}}</td>
                         <td class="is-hidden-mobile">{{round(betBout.predProb)}}%</td>
-                        <td>{{convImpProbToAmerOdds(betBout.vegasOdds)}}</td>
+                        <td class="is-hidden-mobile">{{convImpProbToAmerOdds(betBout.vegasOdds)}}</td>
                         <td class="is-hidden-mobile">{{round(betBout.vegasOdds)}}%</td>
                         <td class="is-hidden-mobile">+{{round(betBout.oddsDiff)}}%</td>
                         <td>${{round(betBout.wagerWeight)}}</td>
@@ -85,8 +86,8 @@ export default {
         fightSelected: {type: Boolean, default: false}
     },
     watch: { 
-        fightId: function(newVal, oldVal) { // watch it
-            console.log('Prop changed: ', newVal, ' | was: ', oldVal)
+        fightId: function() { // watch it
+            this.isLoaded = false
             this.totalBet = 0
             this.totalResult = 0
             if (this.fightId !== '') {
@@ -99,7 +100,8 @@ export default {
             showBetTable: true,
             betData: [],
             totalBet: 0,
-            totalResult: 0
+            totalResult: 0,
+            isLoaded: false
         }
     },
     methods: {
@@ -123,10 +125,12 @@ export default {
             }
         },
         toggleBetTableVis () {
-            if (this.showBetTable) {
-                this.showBetTable = false
-            } else {
-                this.showBetTable = true
+            if (this.isLoaded) {
+                if (this.showBetTable) {
+                    this.showBetTable = false
+                } else {
+                    this.showBetTable = true
+                }
             }
         },
         getBetsFromFightData () {
@@ -143,6 +147,7 @@ export default {
                                     this.totalBet += this.betData[i]['wagerWeight']
                                 }
                             }
+                            this.isLoaded = true
                         }
                     ).catch(error => console.log(error))           
             } else {
@@ -155,8 +160,9 @@ export default {
                                 this.totalBet += this.betData[i]['wagerWeight']
                                 this.totalResult += this.betData[i]['betResult']
                             }
+                            this.isLoaded = true
                         }
-                    ).catch(error => console.log(error))        
+                    ).catch(error => console.log(error))                          
             } 
         },
     }

@@ -29,26 +29,21 @@
             <li class="is-hidden-tablet is-hidden-widescreen is-active" v-if="boutSelected">
                 <a>{{abbrevBoutName}}</a>
             </li>
-            <!-- <li class="is-active is-hidden-mobile">
-                <a>{{selectedBoutName}}</a>
-            </li>
-
-            <li class="is-active is-hidden-tablet is-hidden-widescreen">
-                <a>{{abbrevBoutName}}</a>
-            </li> -->
         </ul>
       </nav>
       <section class="container">
           <div class="columns">
-              <FightBoutAside
-                  v-if="!fightScreenLoading"
-                  :pastFightMetaList="fightScreenFights"
-                  :boutList="fightBouts"
-                  @switchBout="switchFightScreenBout"
-                  @switchFight="switchFightScreenFight"
-                  :curFightId="selectedFightId"
-                  :curBoutId="selectedBoutId"
-              />
+              <aside class="column is-one-fifth aside is-hidden-mobile">
+                <FightBoutAside
+                    v-if="!fightScreenLoading"
+                    :pastFightMetaList="fightScreenFights"
+                    :boutList="fightBouts"
+                    @switchBout="switchFightScreenBout"
+                    @switchFight="switchFightScreenFight"
+                    :curFightId="selectedFightId"
+                    :curBoutId="selectedBoutId"
+                />
+              </aside>
               <main class="column main">
                   <FightLandingHeader
                     :selectedFightName="selectedFightName"
@@ -114,21 +109,12 @@
               </main>
           </div>
       </section>
-      <!-- <FightWrapper
-        v-if="!fightScreenLoading"
-        :fightId="selectedFightId"
-        :fightName="selectedFightName"
-        @newFightId="switchFightScreenFight"
-        :fightMetaList="fightScreenFights"
-      /> -->
     </section>
   </div>
 </template>
 
 <script>
 import ApiService from '@/services/ApiService.js'
-//import FightWrapper from '@/components/Fight/FightWrapper.vue'
-//import FightDropdown from '@/components/FightDropdown.vue'
 import FightBoutAside from '@/components/Fight/FightBoutAside.vue'
 import FightLandingHeader from '@/components/Fight/FightLandingHeader.vue'
 import FightBetTable from '@/components/Fight/FightBetTable.vue'
@@ -232,7 +218,6 @@ export default {
                       this.fightScreenLoading = false
                   }
               )
-          console.log('init fights page')
         },
         initBoutDetails () {
           ApiService.getBoutInfo(this.selectedBoutId)
@@ -243,15 +228,16 @@ export default {
             )
         },
         switchFightScreenFight (newFightId) {
-          this.resetSelectedBout()
-          this.selectedFightId = newFightId
-          this.selectedFightOid = this.fightScreenSummaries[this.selectedFightId].oid
-          this.selectedFightName = this.fightScreenSummaries[this.selectedFightId].fightName
-          this.abbrevFightName = this.selectedFightName.split(':')[1]
-          this.selectedFightDate = this.fightScreenSummaries[this.selectedFightId].fightDate
-          this.isFutureFight = this.evalIfFightInFuture(this.selectedFightDate)
-          this.fightSelected = true
-          this.getBoutsFromFightData()
+            this.fightBouts = []
+            this.resetSelectedBout()
+            this.selectedFightId = newFightId
+            this.selectedFightOid = this.fightScreenSummaries[this.selectedFightId].oid
+            this.selectedFightName = this.fightScreenSummaries[this.selectedFightId].fightName
+            this.abbrevFightName = this.selectedFightName.split(':')[1]
+            this.selectedFightDate = this.fightScreenSummaries[this.selectedFightId].fightDate
+            this.isFutureFight = this.evalIfFightInFuture(this.selectedFightDate)
+            this.fightSelected = true
+            this.getBoutsFromFightData()
         },
         switchFightScreenBout (newBout) {
           this.selectedBoutId = newBout.boutId
@@ -290,6 +276,7 @@ export default {
           this.boutSelected = true
         },
         resetSelectedFight () {
+            this.fightBouts = []
             this.resetSelectedBout()
             this.selectedFightId = ''
             this.selectedFightName = ''

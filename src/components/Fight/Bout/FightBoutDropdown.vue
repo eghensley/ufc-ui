@@ -1,16 +1,18 @@
 <template>
     <div class="card events-card is-hidden-tablet is-hidden-widescreen is-shadow-dreamy">
-        <header class="card-header">
+        <header class="card-header is-bevel">
             <p class="card-header-title">
                 Bout Selection
+                <progress class="progress is-medium is-dark" max="100" v-if="!isLoaded">45%</progress>
             </p>
+            <h1 v-if="!isLoaded"> {{evalIfLoaded()}} </h1>
             <a class="card-header-icon" v-on:click="toggleBoutDropdown()">
                 <span class="icon">
-                    <i aria-hidden="true" v-bind:class="{ 'fas fa-chevron-circle-up': boutDropDownVis, 'fas fa-chevron-circle-down': !boutDropDownVis }"></i>
+                    <i aria-hidden="true" v-bind:class="{ 'fas fa-chevron-circle-up': isLoaded && boutDropDownVis, 'fas fa-chevron-circle-down': !(isLoaded && boutDropDownVis) }"></i>
                 </span>
             </a>
         </header>
-        <div class="card-table" v-if="boutDropDownVis">
+        <div class="card-table" v-if="boutDropDownVis && isLoaded">
             <!-- <div class="card-table"> -->
                 <div class="content">
                     <table class="table is-fullwidth is-shadow-longer">
@@ -23,7 +25,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr @click="switchBout(bout)" class="is-shadow-dreamy" v-for="bout in boutList" :key="bout.oid" v-bind:class="{'is-active': evalIfBoutSelected(bout) }">
+                            <tr @click="switchBout(bout)" class="is-shadow-inverted" v-for="bout in boutList" :key="bout.oid" v-bind:class="{'is-active': evalIfBoutSelected(bout) }">
                                 <td width="5%">
                                     <span>
                                         <i class="fas fa-arrow-circle-right" v-if="evalIfBoutSelected(bout)"></i>
@@ -85,14 +87,29 @@ export default {
         },
         selBoutId: {type: String, default: ''}
     },
+    watch: {
+        boutList (bouts) {
+            if (bouts.length !== 0) {
+                this.isLoaded = true
+            } else {
+                this.isLoaded = false
+            }
+        }
+    },
     data () {
         return {
             selectedFighter: {},
             isFighterModalVisible: false,
-            boutDropDownVis: true
+            boutDropDownVis: true,
+            isLoaded: false
         }
     },
     methods: {
+        evalIfLoaded () {
+            if (this.boutList.length !== 0) {
+                this.isLoaded = true
+            }
+        },
         showFighterModal (fighterInfo) {
             this.selectedFighter = fighterInfo
             this.isFighterModalVisible = true
@@ -130,10 +147,12 @@ export default {
             }
         },
         toggleBoutDropdown () {
-            if (this.boutDropDownVis) {
-                this.boutDropDownVis = false
-            } else {
-                this.boutDropDownVis = true
+            if (this.isLoaded) {
+                if (this.boutDropDownVis) {
+                    this.boutDropDownVis = false
+                } else {
+                    this.boutDropDownVis = true
+                }
             }
         }
     }    

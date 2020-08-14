@@ -1,7 +1,17 @@
 <template>
     <div class="card events-card is-shadow-longer">
         <h1 v-if="topRankingTableLoading && !topRankingTableInitialized"> {{initTopRankPage()}} </h1>
-        <div class="card-table">
+        <header class="card-header is-bevel">
+            <p class="card-header-title">
+                Weight Class Selection
+            </p>
+            <a class="card-header-icon is-link" v-on:click="toggleTopRankTableVis()">
+                <span class="icon">
+                    <i aria-hidden="true" v-bind:class="{ 'fas fa-chevron-circle-up': showTopRankTable, 'fas fa-chevron-circle-down': !showTopRankTable }"></i>
+                </span>
+            </a>
+        </header>
+        <div class="card-table" v-if="showTopRankTable">
             <div class="content">
                 <table class="table is-fullwidth is-shadow-longer">
                     <thead>
@@ -13,8 +23,8 @@
                             </th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr class="is-shadow-dreamy" v-for="rank in topWeightClassRankings" :key="rank.wc">
+                    <tbody class="is-shadow-inverted">
+                        <tr v-for="rank in topWeightClassRankings" :key="rank.wc">
                             <td width="5%">
                                 <i class="fa fa-bell-o"></i>
                             </td>
@@ -78,13 +88,21 @@ export default {
         return {
             topRankingTableLoading: true,
             topRankingTableInitialized: false,
-            topWeightClassRankings: []
+            topWeightClassRankings: [],
+            showTopRankTable: true
         }
     },
     methods: {
         initTopRankPage () {
             this.topRankingTableInitialized = true
             this.getTopRankings()
+        },
+        toggleTopRankTableVis () {
+            if (this.showTopRankTable) {
+                this.showTopRankTable = false
+            } else {
+                this.showTopRankTable = true
+            }
         },
         getTopRankings () {
             this.topRankingTableLoading = true

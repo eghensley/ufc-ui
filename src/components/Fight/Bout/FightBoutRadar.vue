@@ -4,7 +4,7 @@
         <div class="modal-background"></div>
         <div class="modal-card">
             <header class="modal-card-head">
-                <p class="modal-card-title">Direct Elo Comparison</p>
+                <p class="modal-card-title">Relative Elo Rankings</p>
                 <button class="delete" aria-label="close" @click="close"></button>
             </header>
             <section class="modal-card-body">
@@ -69,6 +69,11 @@ var weightClassDict = {
     'CW': 'Catch Weight'
 }
 
+const rounder = new Intl.NumberFormat('en-US', {
+   minimumFractionDigits: 2,      
+   maximumFractionDigits: 2,
+})
+
 export default {
     name: 'fightBoutRadar',
     components: {
@@ -108,6 +113,16 @@ export default {
                 title: {
                     text: ''
                 },
+                plotOptions: {
+                    radar: {
+                        polygons: {
+                            strokeColor: '#e8e8e8',
+                            fill: {
+                                colors: ['#1f2328bd', '#1f2328de', '#1f2328']
+                            }
+                        }
+                    },
+                },
                 xaxis: {
                     categories: ['Striking Offense', 'Striking Defense', 'Grappling Offense', 'Grappling Defense', 'K/O Power', 'Chin', 'Submission', 'Evasiveness'],
                     // labels: {
@@ -123,11 +138,31 @@ export default {
                 },
                 yaxis: {
                     min: 0,
-                    max: 100
+                    max: 100,
+                    labels: {
+                        // show: false,
+                        // style: {
+                        //     colors: '#fafafa'
+                        // }
+                    formatter: () => { return '' },
+                    },
+                    axisTicks: {
+                        show: false
+                    }
                 },
                 tooltip: {
-                    theme: 'dark'
-                }
+                    theme: 'dark',
+                    x: {
+                        formatter: function (val) {
+                            return val
+                        }
+                    },
+                    y: {
+                        formatter: function (val) {
+                            return rounder.format(Math.abs(val)) + '%'
+                        }
+                    }
+                },
             }   
         }
     }
@@ -136,7 +171,7 @@ export default {
 
 <style scoped>
   .modal {
-    background: #FFFFFF;
+    background: #5bc0de70;
     box-shadow: 2px 2px 20px 1px;
     overflow-x: auto;
     display: flex;
