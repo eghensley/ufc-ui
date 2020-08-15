@@ -14,6 +14,9 @@
             <div class="content">
                 Event and rolling total results
                 <apexchart v-if="!homeChartLoading" type="line" height="440" :options="chartOptions" :series="betSeries"></apexchart>
+
+        <!-- <apexchart type="line" height="350" :options="ex2ChartOptions" :series="ex2Series"></apexchart> -->
+
             </div>
         </div>
     </div>
@@ -136,7 +139,151 @@ export default {
                 tooltip: {
                     theme: 'dark'
                 }
-            }         
+            },
+            
+                    
+                    
+                    
+
+//          ex2Series: [
+             
+//              {'name': 'Cumulative Confidence',
+//                 'type': 'area',
+//                 'data': [-0.031402769563075916,
+//                     -0.013406375457908182,
+//                     0.005241234889522828,
+//                     -0.015063460193800227,
+//                     0.005276746064047266,
+//                     0.025846480817463102,
+//                     0.046597202903743695,
+//                     0.06860802196250215,
+//                     0.0916625148698128,
+//                     0.13784391632681947,
+//                     0.051044535243640665]
+//                 }, 
+
+// {'name': 'Feature Impact',
+//  'type': 'bar',
+//  'data': [-0.031402769563075916,
+//   0.017996394105167735,
+//   0.01864761034743101,
+//   -0.020304695083323054,
+//   0.020340206257847493,
+//   0.020569734753415836,
+//   0.020750722086280593,
+//   0.022010819058758457,
+//   0.023054492907310653,
+//   0.046181401457006666,
+//   -0.0867993810831788]},
+
+
+
+
+
+//   ],
+//           ex2ChartOptions: {
+//             chart: {
+//               height: 350,
+//               type: 'line',
+//             },
+//             stroke: {
+//               curve: 'smooth'
+//             },
+//             fill: {
+//               type:'solid',
+//               opacity: [.5, .75],
+//             },
+//             colors: ['#fafafa', '#4d6470'],
+//             labels: ['24 other features', 'off_ko_diff',
+//                     'eff_strike_diff',
+//                     'prev_fights_1',
+//                     'eff_strike_2',
+//                     'off_ko_1',
+//                     'def_strike_diff',
+//                     'off_ko_share',
+//                     'def_ko_1',
+//                     'eff_strike_share',
+//                     'age_diff'],
+//                 legend: {
+//                     labels: {
+//                         colors: '#fafafa'
+//                     }
+//                 },
+//             markers: {
+//               size: 0
+//             },
+//             yaxis: [
+//               {
+//                 min: -.25,
+//                 max: .25,
+//                 title: {
+//                   text: 'Red Corner Winning Confidence',
+//                         style: {
+//                             color: '#fafafa'
+//                         },
+//                 },
+//                 labels: {
+//                     formatter: function (val) {
+//                         return (rounder.format(val * 100) * -1) + '%'
+//                     },
+//                     style: {
+//                         colors: '#aaa'
+//                     }
+//                 }
+//               },
+//               {
+//                 min: -.1,
+//                 max: .1,
+//                 title: {
+//                   text: 'Feature Impact',
+//                         style: {
+//                             color: '#fafafa'
+//                         },
+//                 },
+//                 opposite: true,
+//                     labels: {
+//                         formatter: function (val) {
+//                             return (rounder.format(val * 100) * -1) + '%'
+//                         },
+//                         style: {
+//                             colors: '#aaa'
+//                         }
+//                     }
+//               },
+//             ],
+//             xaxis: {
+//                 categories: [],
+//                 title: {
+//                     text: 'Feature',
+//                     style: {
+//                         color: '#fafafa'
+//                     }
+//                 },
+//                 labels: {
+//                     formatter: function (val) {
+//                         return val//.split(";")[1]
+//                     },
+//                     rotateAlways: true,
+//                     style: {
+//                         colors: '#aaa'
+//                     }
+//                 },
+//                 tooltip: {
+//                     enabled: false
+//                 }
+//             },
+//             tooltip: {
+//                 theme: 'dark',
+//                 shared: true,
+//                 y: {
+//                     formatter: function (val) {
+//                         return rounder.format(val * 100) + '%'
+//                     }
+//                 }
+//             },
+//           },
+
+
         }
     },
     methods: {
