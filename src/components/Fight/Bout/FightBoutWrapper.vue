@@ -145,6 +145,7 @@
                 <a :disabled="!directEloBarReady" @click="openDirectBarEloModal()" class="button card-footer-item is-primary is-fullwidth">Direct ELO Comparison</a>
                 <a :disabled="!relEloRadarReady" @click="openRelRadarEloModal()" class="button is-primary card-footer-item is-fullwidth">Relative ELO Comparison</a>
                 <a :disabled="!changeEloBarReady" @click="openChangeBarEloModal()" class="button is-primary card-footer-item is-fullwidth">ELO Change After Fight</a>
+                <a :disabled="!boutModelBarReady" @click="openBoutModelBarModal()" class="button is-primary card-footer-item is-fullwidth">Model Prediction Breakdown</a>
             </div>
         </footer>
     </div>
@@ -199,6 +200,7 @@ export default {
         directEloBarReady: {type: Boolean, default: false},
         relEloRadarReady: {type: Boolean, default: false},
         changeEloBarReady: {type: Boolean, default: false},
+        boutModelBarReady: {type: Boolean, default: false},
     },
     watch: {
         selectedBoutInfo(newInfo) {
@@ -240,6 +242,9 @@ export default {
         },
         openChangeBarEloModal () {
             this.$emit('displayChangeEloBarModal')
+        },
+        openBoutModelBarModal () {
+            this.$emit('displayBoutModelBarModal')
         },
         resolveWeightClass (myKey) {
             return weightClassDict[myKey];

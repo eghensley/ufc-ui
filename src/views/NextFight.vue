@@ -78,9 +78,11 @@
                       :directEloBarReady="eloBar.eloChartReady"
                       :relEloRadarReady="eloRadar.eloRadarChartReady"
                       :changeEloBarReady="eloChange.eloChartReady"
+                      :boutModelBarReady="boutModel.eloChartReady"
                       @displayDirectEloBarModal="openDirectEloBarModal"
                       @displayRelEloRadarModal="openRelEloRadarModal"
                       @displayChangeEloBarModal="openChangeEloBarModal"
+                      @displayBoutModelBarModal="openBoutModelModal"
                   />
 
                   <FightBoutBar
@@ -106,6 +108,15 @@
                       :isFuture="isFutureFight"
                       @closeEloChangeModal="closeChangeEloBarModal"
                   />
+
+                  <FightBoutModelBar
+                      v-if="boutModel.showBoutModelModal"
+                      :showBoutModelChart="boutModel.eloChartReady"
+                      :isFuture="isFutureFight"
+                      :modelBoutDataSeries="boutModel.eloSeries"
+                      :modelColumns="boutModel.statCols"
+                      @closeBoutModelModal="closeBoutModelModal"
+                  />
               </main>
           </div>
       </section>
@@ -124,6 +135,7 @@ import FightBoutWrapper from '@/components/Fight/Bout/FightBoutWrapper.vue'
 import FightBoutBar from '@/components/Fight/Bout/FightBoutBar.vue'
 import FightBoutRadar from '@/components/Fight/Bout/FightBoutRadar.vue'
 import FightBoutChangeBar from '@/components/Fight/Bout/FightBoutChangeBar.vue'
+import FightBoutModelBar from '@/components/Fight/Bout/FightBoutModelBar.vue'
 
 const formatter = new Intl.NumberFormat('en-US', {
    minimumFractionDigits: 2,      
@@ -134,7 +146,7 @@ const formatter = new Intl.NumberFormat('en-US', {
 export default {
     name: 'fight',
     components: {
-      FightBoutAside, FightLandingHeader, FightBetTable, FightDropdown, FightBoutDropdown, FightBoutWrapper, FightBoutBar, FightBoutRadar, FightBoutChangeBar
+      FightBoutAside, FightLandingHeader, FightBetTable, FightDropdown, FightBoutDropdown, FightBoutWrapper, FightBoutBar, FightBoutRadar, FightBoutChangeBar, FightBoutModelBar
     },
     data () {
       return {
@@ -197,6 +209,21 @@ export default {
             ],
           eloChartReady: true,
           showEloChangeModal: false
+        },
+        boutModel: {
+          eloSeries: [
+                {
+                    name: 'Fighter 1',
+                    data: [0, 0, 0, 0, 0, 0, 0, 0]
+                },
+                {
+                    name: 'Fighter 2',
+                    data: [0, 0, 0, 0, 0, 0, 0, 0]
+                }
+            ],
+          eloChartReady: true,
+          showBoutModelModal: false,
+          statCols: [],
         }
       }
     },
@@ -244,7 +271,11 @@ export default {
           this.eloBar.eloChartReady = false
           this.eloRadar.eloRadarChartReady = false
           this.eloChange.eloChartReady = false
+          this.boutModel.eloChartReady = false
+          this.boutModel.statCols = []
+          this.boutModel.eloSeries = []
           this.initBoutDetails()
+          this.getModelBoutExplainability()
           this.getFirstFighterElo(newBout['fighterBoutXRefs'][0]['fighter']['oid'], newBout['fighterBoutXRefs'][1]['fighter']['oid'])
           this.selectedBoutInfo = newBout
           if (this.isFutureFight) {
@@ -328,6 +359,14 @@ export default {
             this.eloBar.showDirectEloBarModal = true
           }
         },
+        closeBoutModelModal () {
+            this.boutModel.showBoutModelModal = false
+        },
+        openBoutModelModal () {
+          if (this.boutModel.eloChartReady){
+            this.boutModel.showBoutModelModal = true
+          }
+        },
         closeChangeEloBarModal () {
           this.eloChange.showEloChangeModal = false
         },
@@ -343,6 +382,20 @@ export default {
           if (this.eloRadar.eloRadarChartReady){
             this.eloRadar.showRelEloRankModal = true
           }
+        },
+        getModelBoutExplainability () {
+            ApiService.getBoutModelExplainability (this.selectedBoutId)
+                .then(
+                    explainability => {
+                        this.boutModel.eloSeries = explainability.response.boutArray
+                        this.boutModel.statCols = explainability.response.statCols
+                        this.boutModel.eloChartReady = true
+                    }
+                ).catch(() => {
+                        console.log('bout explainability failed')
+                        this.boutModel.eloChartReady = false
+                    }
+                )
         },
         getFirstFighterElo (fighterOid1, fighterOid2) {
             ApiService.getFighterEloStats(fighterOid1, this.selectedFightOid)

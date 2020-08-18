@@ -9,8 +9,8 @@ var flaskServer = 'https://ufc-ml-api-flask.us-east.mybluemix.net'
 // var flaskServer = null
 
 if (local) {
-    springServer = 'http://localhost:4646'
-    flaskServer = 'http://207.237.93.29:4747'
+    springServer = 'http://207.237.93.29:4646'
+    flaskServer = 'http://localhost:4747'
 }
 
 
@@ -281,6 +281,14 @@ export default {
     initFutureBouts (adminLogin) {
         var adminHeaders = this.buildAdminHeaders(adminLogin)
         return axios.get( flaskServer + '/ufc/api/v1.0/populate/future', adminHeaders).then(response => {
+            return response.data
+        })
+        .catch(error => {
+            console.log(error)
+        })
+    },
+    getBoutModelExplainability (boutId) {
+        return axios.get( flaskServer + '/ufc/api/v1.0/explain/bout/' + boutId, standardHeaders).then(response => {
             return response.data
         })
         .catch(error => {
